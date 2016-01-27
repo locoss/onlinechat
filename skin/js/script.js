@@ -47,11 +47,17 @@ var chat = {
 			
 			$.tzPOST('login',$(this).serialize(),function(r){
 				working = false;
-				
+				alert('srasu');
 				if(r.error){
+                                    alert('dno');
 					chat.displayError(r.error);
 				}
-				else chat.login(r.name,r.gravatar);
+				else {
+                                    alert('norm');
+                                    chat.login(r.name,r.gravatar);
+                                }
+                                alert('finish');
+                                
 			});
 			
 			return false;
@@ -344,7 +350,9 @@ var chat = {
 // Custom GET & POST wrappers:
 
 $.tzPOST = function(action,data,callback){
-	$.post('php/ajax.php?action='+action,data,callback,'json');
+    alert('index'+action);
+	$.post('/index/'+action,data,callback,'json');
+        
 }
 
 $.tzGET = function(action,data,callback){

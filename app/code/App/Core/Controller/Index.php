@@ -1,22 +1,36 @@
 <?php
+namespace Chat\App\Core\Controller;
 
-/* The Chat class exploses public static methods, used by ajax.php */
+use Chat\Framework\Db\DB as DB;
+use Chat\Framework\View\View as View;
 
-class Chat {
-
-    public static function login($name, $email) {
-        if (!$name || !$email) {
+class Index {
+    
+    public $view;
+    
+    public function __construct($config, $action) {
+        $this->$action();
+    }
+    
+    public function indexAction(){
+        $this->view = new View();
+    }
+    
+  public function loginAction($name, $email) {
+      $name = 'Alex';
+      $email = 'lidhen@list.ru';
+      if (!$name || !$email) {
             throw new Exception('Fill in all the required fields.');
         }
+        
 
         if (!filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL)) {
-            throw new Exception('Your email is invalid.');
+            //throw new Exception('Your email is invalid.');
         }
-
         // Preparing the gravatar hash:
         $gravatar = md5(strtolower(trim($email)));
-
-        $user = new ChatUser(array(
+        
+        $user = new \Chat\App\Core\Model\User(array(
             'name' => $name,
             'gravatar' => $gravatar
         ));
@@ -31,14 +45,16 @@ class Chat {
             'gravatar' => $gravatar
         );
 
-        return array(
+        $response =  array(
             'status' => 1,
             'name' => $name,
-            'gravatar' => Chat::gravatarFromHash($gravatar)
+            'gravatar' => self::gravatarFromHash($gravatar)
         );
+        
+        return json_decode($response);
     }
 
-    public static function checkLogged() {
+    public function checkLoggedAction() {
         $response = array('logged' => false);
 
         if ($_SESSION['user']['name']) {
@@ -52,7 +68,7 @@ class Chat {
         return $response;
     }
 
-    public static function logout() {
+    public function logoutAction() {
         DB::query("DELETE FROM webchat_users WHERE name = '" . DB::esc($_SESSION['user']['name']) . "'");
 
         $_SESSION = array();
@@ -61,7 +77,7 @@ class Chat {
         return array('status' => 1);
     }
 
-    public static function submitChat($chatText) {
+    public function submitChatAction($chatText) {
         if (!$_SESSION['user']) {
             throw new Exception('You are not logged in');
         }
@@ -85,7 +101,7 @@ class Chat {
         );
     }
 
-    public static function getUsers() {
+    public function getUsersAction() {
         if ($_SESSION['user']['name']) {
             $user = new ChatUser(array('name' => $_SESSION['user']['name']));
             $user->update();
@@ -110,7 +126,7 @@ class Chat {
         );
     }
 
-    public static function getChats($lastID) {
+    public function getChatsAction($lastID) {
         $lastID = (int) $lastID;
 
         $result = DB::query('SELECT * FROM webchat_lines WHERE id > ' . $lastID . ' ORDER BY id ASC');
@@ -137,7 +153,4 @@ class Chat {
         return 'http://www.gravatar.com/avatar/' . $hash . '?size=' . $size . '&amp;default=' .
                 urlencode('http://www.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?size=' . $size);
     }
-
 }
-
-?>

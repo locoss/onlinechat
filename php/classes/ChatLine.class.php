@@ -8,7 +8,7 @@ class ChatLine extends ChatBase{
 	
 	public function save(){
 		DB::query("
-			INSERT INTO webchat_lines (author, gravatar, text)
+			INSERT INTO chat (author, gravatar, text)
 			VALUES (
 				'".DB::esc($this->author)."',
 				'".DB::esc($this->gravatar)."',

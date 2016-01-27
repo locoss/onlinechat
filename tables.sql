@@ -2,7 +2,7 @@
 -- Table structure for table `webchat_lines`
 --
 
-CREATE TABLE `webchat_lines` (
+CREATE TABLE `chat` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `author` varchar(16) NOT NULL,
   `gravatar` varchar(32) NOT NULL,
@@ -18,7 +18,7 @@ CREATE TABLE `webchat_lines` (
 -- Table structure for table `webchat_users`
 --
 
-CREATE TABLE `webchat_users` (
+CREATE TABLE `users` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `name` varchar(16) NOT NULL,
   `gravatar` varchar(32) NOT NULL,

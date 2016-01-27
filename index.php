@@ -1,5 +1,7 @@
 <?php
 
+define('URL', $_SERVER['HTTP_HOST']);
+
 try {
     require __DIR__ . '/app/bootstrap.php';
 } catch (Exception $e) {
@@ -16,6 +18,4 @@ HTML;
 }
 
 
-echo Chat\Framework\Bootstrap::app();
-
-?>
+Chat\Framework\Bootstrap::app();
