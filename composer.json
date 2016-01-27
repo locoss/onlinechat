@@ -1,0 +1,8 @@
+{
+	"autoload":{
+		"psr-4": {
+			"Chat\\Framework\\": "app/lib/Chat/Framework/",
+			"Chat\\": "app/code/"
+		}
+	}
+}
