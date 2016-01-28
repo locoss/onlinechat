@@ -1,8 +1,9 @@
-<?php 
+<?php
 
 namespace Chat\Framework\Model;
 
-class Object  {
+class Object {
+
     protected $_data;
 
     public function __call($method, $args) {
@@ -26,19 +27,19 @@ class Object  {
     }
 
     protected function getData($key = null) {
-        if(!$key){
+        if (!$key) {
             return $this->_data;
         }
         return isset($this->_data[$key]) ? $this->_data[$key] : null;
     }
 
     protected function setData($key, $value) {
-        if(isset($this->_data[$key]))
+        if (isset($this->_data[$key]))
             $this->_data[$key] = $value;
     }
-    
-    protected function insertData($data){
+
+    protected function insertData($data) {
         $this->_data = $data;
     }
-    
+
 }

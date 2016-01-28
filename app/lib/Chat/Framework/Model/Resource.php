@@ -3,13 +3,20 @@
 namespace Chat\Framework\Model;
 
 use Chat\Framework\Model\DbTable as DbTable;
+use Chat\Framework\Db\DB as DB;
 
-class Resource{
-    public static function load($id){
+class Resource {
+
+    public static function load($id) {
         return DbTable::getArrayById($id);
     }
-    
-    public static function initTable($init){
+
+    public static function initTable($init) {
         return DbTable::getArray($init);
     }
+
+    public static function save($init, $keys, $values) {
+        return DBTable::save($init, $keys, $values);
+    }
+
 }

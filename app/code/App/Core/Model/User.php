@@ -5,8 +5,8 @@ namespace Chat\App\Core\Model;
 use Chat\Framework\Db\DB as DB;
 use Chat\Framework\Model\AModel as AModel;
 
-class User extends AModel {   
-    
+class User extends AModel {
+
     public function __construct() {
         $this->_init('users');
         parent::__construct();
@@ -20,11 +20,6 @@ class User extends AModel {
         } else {
             return false;
         }
-    }
-
-    public static function gravatarFromHash($hash, $size = 23) {
-        return 'http://www.gravatar.com/avatar/' . $hash . '?size=' . $size . '&amp;default=' .
-                urlencode('http://www.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?size=' . $size);
     }
 
 }
