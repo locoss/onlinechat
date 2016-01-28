@@ -44,10 +44,27 @@ class DbTable {
     }
 
     protected static function saveFile($init, $data) {
+       
+        $filename_schema = __DIR__ . '/Database/' . $init . '_schema.json';
+        $filename_database = __DIR__ . '/Database/' . $init . '.json';
+         
+        $schema = file_get_contents($filename_schema);
         
-        $filename = __DIR__ . '/Database/' . $init . '_schema.json';
-        $string = file_get_contents($filename);
-        $table = json_decode($string, true);
+        $table_schema = json_decode($schema, true);
+        
+        $database = file_get_contents($filename_database);
+        $table_database = json_decode($database, true);
+        
+        
+        if(is_array($table_database)){
+            array_push($table_database, $data);
+        }else{
+            $data['id'] = 1;
+            $table_database = array($data);
+        }
+                
+        file_put_contents($filename_database, json_encode($table_database));
+        
     }
 
     protected static function saveDb($init, $data) {

@@ -38,6 +38,7 @@ class Index {
 
             $user->setName($name);
             $user->setGravatar($gravatar);
+           // $user->setLastActivity();
             $user->save();
             //if ($user->affected_rows != 1) {
             //throw new \Exception('This nick is in use.');
