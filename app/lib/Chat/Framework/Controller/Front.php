@@ -34,8 +34,10 @@ class Front {
         if (array_key_exists($request[0], $routers)) {
             $class_name = $routers[$request[0]];
             $action = $request[1] . "Action";
-            $controller = new $class_name($this->config, $action);
-        }
+            $controller = new $class_name($action);
+        }else{
+			$controller = new \Chat\App\Core\Controller\Index('indexAction');
+		}
         if ($controller->view) {
             $this->view = $controller->view;
             $this->setLayout();

@@ -92,7 +92,7 @@ var chat = {
 			// Using our tzPOST wrapper method to send the chat
 			// via a POST AJAX request:
 			
-			$.tzPOST('submitChat',$(this).serialize(),function(r){
+			$.tzPOST('submitchat',$(this).serialize(),function(r){
 				working = false;
 				
 				$('#chatText').val('');
@@ -107,7 +107,7 @@ var chat = {
 		
 		// Logging the user out:
 		
-		$('a.logoutButton').live('click',function(){
+		/*$('a.logoutButton').on('click',function(){
 			
 			$('#chatTopBar > span').fadeOut(function(){
 				$(this).remove();
@@ -120,17 +120,18 @@ var chat = {
 			$.tzPOST('logout');
 			
 			return false;
-		});
+		});*/
 		
 		// Checking whether the user is already logged (browser refresh)
 		
-		$.tzGET('checkLogged',function(r){
+		$.tzGET('checklogged',function(r){
+			
 			if(r.logged){
 				chat.login(r.loggedAs.name,r.loggedAs.gravatar);
 			}
 		});
 		
-		// Self executing timeout functions
+		
 		
 		(function getChatsTimeoutFunction(){
 			chat.getChats(getChatsTimeoutFunction);
@@ -139,7 +140,6 @@ var chat = {
 		(function getUsersTimeoutFunction(){
 			chat.getUsers(getUsersTimeoutFunction);
 		})();
-		
 	},
 	
 	// The login method hides displays the
@@ -155,6 +155,13 @@ var chat = {
 			$('#submitForm').fadeIn();
 			$('#chatText').focus();
 		});
+		(function getChatsTimeoutFunction(){
+			chat.getChats(getChatsTimeoutFunction);
+		})();
+		
+		(function getUsersTimeoutFunction(){
+			chat.getUsers(getUsersTimeoutFunction);
+		})();
 		
 	},
 	
@@ -169,7 +176,7 @@ var chat = {
 				arr = [
 				'<span><img src="',params.gravatar,'" width="23" height="23" />',
 				'<span class="name">',params.name,
-				'</span><a href="" class="logoutButton rounded">Logout</a></span>'];
+				'</span><a href="http://localhost/onlinechat/index/logout" id="logoutButton" class="logoutButton rounded">Logout</a></span>'];
 			break;
 			
 			case 'chatLine':
@@ -249,8 +256,7 @@ var chat = {
 	// (since lastID), and adds them to the page.
 	
 	getChats : function(callback){
-		$.tzGET('getChats',{lastID: chat.data.lastID},function(r){
-			
+		$.tzGET('getchats',function(r){
 			for(var i=0;i<r.chats.length;i++){
 				chat.addChatLine(r.chats[i]);
 			}
@@ -297,7 +303,6 @@ var chat = {
 	
 	getUsers : function(callback){
 		$.tzGET('getUsers',function(r){
-			
 			var users = [];
 			
 			for(var i=0; i< r.users.length;i++){
@@ -348,12 +353,13 @@ var chat = {
 // Custom GET & POST wrappers:
 
 $.tzPOST = function(action,data,callback){
-	$.post('http://localhost/onlinechat/index/'+action,data,callback,'json');
+	$.post(getBaseUrl() + '/index/'+action,data,callback,'json');
         
 }
 
 $.tzGET = function(action,data,callback){
-	$.get('php/ajax.php?action='+action,data,callback,'json');
+
+	$.get(getBaseUrl() + '/index/'+action,data,callback,'json');
 }
 
 // A custom jQuery method for placeholder text:

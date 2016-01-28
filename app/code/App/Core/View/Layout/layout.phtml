@@ -10,7 +10,11 @@ $url = Chat\Framework\Bootstrap::BaseUrl();
         <link rel="stylesheet" type="text/css" href="<?php echo $url ?>/skin/js/jScrollPane/jScrollPane.css" />
         <link rel="stylesheet" type="text/css" href="<?php echo $url ?>/skin/css/page.css" />
         <link rel="stylesheet" type="text/css" href="<?php echo $url ?>/skin/css/chat.css" />
-
+	<script>
+	function getBaseUrl(){
+		return "<?php echo $url; ?>";
+	}
+	</script>
     </head>
 
     <body>
@@ -19,14 +23,9 @@ $url = Chat\Framework\Bootstrap::BaseUrl();
 
             <div id="chatTopBar" class="rounded"></div>
             <div id="chatLineHolder">
-                
-                <?php echo 'chats';?>
             </div>
 
-            <div id="chatUsers" class="rounded">
-                
-                <?php echo 'users';?>
-                
+            <div id="chatUsers" class="rounded"> 
             </div>
             <div id="chatBottomBar" class="rounded">
                 <div class="tip"></div>
