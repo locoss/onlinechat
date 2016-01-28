@@ -1,6 +1,12 @@
 <?php
-
-define('URL', $_SERVER['HTTP_HOST']);
+$host = $_SERVER['HTTP_HOST'];
+if($host == 'localhost'){
+	$uri = $_SERVER['REQUEST_URI'];
+	$uri = explode('/', $uri);
+	
+	$host = $host . "/" . $uri[1];
+}
+define('URL', $host);
 
 try {
     require __DIR__ . '/app/bootstrap.php';

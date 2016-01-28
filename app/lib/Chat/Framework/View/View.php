@@ -14,8 +14,7 @@ class View {
     public function generate() {
     $layout =  $this->layout;
     $view_object = new $layout();
-    
-        include $this->layout;
+		
     }
     
     

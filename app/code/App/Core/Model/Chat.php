@@ -1,10 +1,10 @@
 <?php
 
 namespace Chat\App\Core\Model;
+use Chat\Framework\Db\DB as DB;
+class Chat {
 
-class Chat extends Chat\Framework\Model\Model {
-
-    protected $name = '', $gravatar = '';
+   protected $text = '', $author = '', $gravatar = '';
 
     public function __construct(array $options) {
 
@@ -14,26 +14,19 @@ class Chat extends Chat\Framework\Model\Model {
             }
         }
     }
-
-    public function save() {
-
-        DB::query("
-			INSERT INTO users (name, gravatar)
+	
+	public function save(){
+		DB::query("
+			INSERT INTO chat (author, gravatar, text)
 			VALUES (
-				'" . DB::esc($this->name) . "',
-				'" . DB::esc($this->gravatar) . "'
+				'".DB::esc($this->author)."',
+				'".DB::esc($this->gravatar)."',
+				'".DB::esc($this->text)."'
 		)");
-
-        return DB::getMySQLiObject();
-    }
-
-    public function update() {
-        DB::query("
-			INSERT INTO users (name, gravatar)
-			VALUES (
-				'" . DB::esc($this->name) . "',
-				'" . DB::esc($this->gravatar) . "'
-			) ON DUPLICATE KEY UPDATE last_activity = NOW()");
-    }
+		
+		
+		
+		return DB::getMySQLiObject();
+	}
 
 }

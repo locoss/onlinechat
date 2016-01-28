@@ -10,9 +10,12 @@ class Bootstrap {
     protected $controller;
   
     public static function app() {
+		//session_name('chat');
+		session_start();
         $config = self::getConfig();
         \Chat\Framework\Db\DB::init($config['db']['connection']);
-        $this->controller = new Controller\Front($config);
+		
+        $controller = new Controller\Front($config);
         //$controller->setLayout();
         
     }

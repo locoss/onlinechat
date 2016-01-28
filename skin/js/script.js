@@ -47,16 +47,14 @@ var chat = {
 			
 			$.tzPOST('login',$(this).serialize(),function(r){
 				working = false;
-				alert('srasu');
+				
 				if(r.error){
-                                    alert('dno');
 					chat.displayError(r.error);
 				}
 				else {
-                                    alert('norm');
-                                    chat.login(r.name,r.gravatar);
-                                }
-                                alert('finish');
+					chat.login(r.name,r.gravatar);
+				}
+                               
                                 
 			});
 			
@@ -350,8 +348,7 @@ var chat = {
 // Custom GET & POST wrappers:
 
 $.tzPOST = function(action,data,callback){
-    alert('index'+action);
-	$.post('/index/'+action,data,callback,'json');
+	$.post('http://localhost/onlinechat/index/'+action,data,callback,'json');
         
 }
 

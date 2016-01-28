@@ -6,6 +6,14 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Chat\\App\\Core\\Controller\\Index' => $baseDir . '/app/code/App/Core/Controller/Index.php',
+    'Chat\\App\\Core\\Model\\Chat' => $baseDir . '/app/code/App/Core/Model/Chat.php',
+    'Chat\\App\\Core\\Model\\User' => $baseDir . '/app/code/App/Core/Model/User.php',
+    'Chat\\App\\Core\\View\\Layout' => $baseDir . '/app/code/App/Core/View/Layout.php',
+    'Chat\\Framework\\Bootstrap' => $baseDir . '/app/lib/Chat/Framework/Bootstrap.php',
     'Chat\\Framework\\Controller\\Controller' => $baseDir . '/app/lib/Chat/Framework/Controller/Controller.php',
-    'Chat\\Framework\\Controller\\Controller\\Bootstrap' => $baseDir . '/app/lib/Chat/Framework/Bootstrap.php',
+    'Chat\\Framework\\Controller\\Front' => $baseDir . '/app/lib/Chat/Framework/Controller/Front.php',
+    'Chat\\Framework\\Db\\DB' => $baseDir . '/app/lib/Chat/Framework/Db/DB.php',
+    'Chat\\Framework\\Model\\Model' => $baseDir . '/app/lib/Chat/Framework/Model/Model.php',
+    'Chat\\Framework\\View\\View' => $baseDir . '/app/lib/Chat/Framework/View/View.php',
 );

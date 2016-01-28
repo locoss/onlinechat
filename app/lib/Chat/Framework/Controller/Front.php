@@ -22,7 +22,14 @@ class Front {
 
     public function dispatch() {
         $request_uri = substr(strtolower($_SERVER["REQUEST_URI"]), 1);
-        $request = explode('/', $request_uri);
+		$server_host = $_SERVER['HTTP_HOST'];
+        
+		$request = explode('/', $request_uri);
+		if($server_host === 'localhost'){
+			array_shift($request);
+			
+		}
+		
         $routers = $this->config['routers'];
         if (array_key_exists($request[0], $routers)) {
             $class_name = $routers[$request[0]];
@@ -34,6 +41,9 @@ class Front {
             $this->setLayout();
             $this->generateLayout();
         }
+		if($controller->response){
+			echo $controller->response;
+		}
     }
 
     public function setLayout() {

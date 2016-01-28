@@ -7,51 +7,61 @@ use Chat\Framework\View\View as View;
 class Index {
     
     public $view;
-    
+    public $response;
     public function __construct($config, $action) {
         $this->$action();
     }
     
     public function indexAction(){
-        $this->view = new View();
+       $this->view = new View();
     }
     
-  public function loginAction($name, $email) {
+  public function loginAction() {
       $name = 'Alex';
       $email = 'lidhen@list.ru';
+	  try{
       if (!$name || !$email) {
-            throw new Exception('Fill in all the required fields.');
+            throw new \Exception('Fill in all the required fields.');
         }
-        
 
         if (!filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL)) {
-            //throw new Exception('Your email is invalid.');
+			
+            //throw new \Exception('Your email is invalid.');
         }
-        // Preparing the gravatar hash:
-        $gravatar = md5(strtolower(trim($email)));
         
+        $gravatar = md5(strtolower(trim($email)));
+       
         $user = new \Chat\App\Core\Model\User(array(
             'name' => $name,
             'gravatar' => $gravatar
         ));
-
-        // The save method returns a MySQLi object
+        
         if ($user->save()->affected_rows != 1) {
-            throw new Exception('This nick is in use.');
+           // throw new \Exception('This nick is in use.');
         }
-
-        $_SESSION['user'] = array(
-            'name' => $name,
-            'gravatar' => $gravatar
-        );
 
         $response =  array(
             'status' => 1,
             'name' => $name,
             'gravatar' => self::gravatarFromHash($gravatar)
         );
+		
+		$_SESSION['user'] = array(
+            'name' => $name,
+            'gravatar' => self::gravatarFromHash($gravatar)
+        );
+		
+		
+	
+		
+		$this->response = json_encode($response);
         
-        return json_decode($response);
+        return $this->response;
+		
+		
+		}catch(\Exception $e){
+		  $e->getMessage();
+	  }
     }
 
     public function checkLoggedAction() {
@@ -61,32 +71,35 @@ class Index {
             $response['logged'] = true;
             $response['loggedAs'] = array(
                 'name' => $_SESSION['user']['name'],
-                'gravatar' => Chat::gravatarFromHash($_SESSION['user']['gravatar'])
+                'gravatar' => self::gravatarFromHash($_SESSION['user']['gravatar'])
             );
         }
-
-        return $response;
+		$this->response = json_encode($response);
+        return $this->response;
     }
 
     public function logoutAction() {
+		
         DB::query("DELETE FROM webchat_users WHERE name = '" . DB::esc($_SESSION['user']['name']) . "'");
 
         $_SESSION = array();
         unset($_SESSION);
-
-        return array('status' => 1);
+		$this->response = json_encode(array('status' => 1));
+        return $this->response;
     }
 
-    public function submitChatAction($chatText) {
+    public function submitchatAction() {
+		$chatText = 'hello';
+		
         if (!$_SESSION['user']) {
-            throw new Exception('You are not logged in');
+            throw new \Exception('You are not logged in');
         }
 
         if (!$chatText) {
-            throw new Exception('You haven\' entered a chat message.');
+            throw new \Exception('You haven\' entered a chat message.');
         }
 
-        $chat = new ChatLine(array(
+        $chat = new \Chat\App\Core\Model\Chat(array(
             'author' => $_SESSION['user']['name'],
             'gravatar' => $_SESSION['user']['gravatar'],
             'text' => $chatText
@@ -95,15 +108,17 @@ class Index {
         // The save method returns a MySQLi object
         $insertID = $chat->save()->insert_id;
 
-        return array(
+        $response =  array(
             'status' => 1,
             'insertID' => $insertID
         );
+		$this->response = json_encode($response);
+		return $this->response;
     }
 
     public function getUsersAction() {
         if ($_SESSION['user']['name']) {
-            $user = new ChatUser(array('name' => $_SESSION['user']['name']));
+            $user = new \Chat\App\Core\Model\User(array('name' => $_SESSION['user']['name']));
             $user->update();
         }
 
@@ -120,10 +135,13 @@ class Index {
             $users[] = $user;
         }
 
-        return array(
+        $response =  array(
             'users' => $users,
             'total' => DB::query('SELECT COUNT(*) as cnt FROM webchat_users')->fetch_object()->cnt
         );
+		
+		$this->response = json_encode($response);
+		return $this->response;
     }
 
     public function getChatsAction($lastID) {
@@ -141,12 +159,15 @@ class Index {
                 'minutes' => gmdate('i', strtotime($chat->ts))
             );
 
-            $chat->gravatar = Chat::gravatarFromHash($chat->gravatar);
+            $chat->gravatar = self::gravatarFromHash($chat->gravatar);
 
             $chats[] = $chat;
         }
 
-        return array('chats' => $chats);
+        $response = array('chats' => $chats);
+		
+		$this->response = json_encode($response);
+		return $this->response;
     }
 
     public static function gravatarFromHash($hash, $size = 23) {
