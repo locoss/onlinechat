@@ -1,10 +1,12 @@
 <?php
 
 namespace Chat\App\Core\Model;
+
 use Chat\Framework\Db\DB as DB;
+
 class Chat {
 
-   protected $text = '', $author = '', $gravatar = '';
+    protected $text = '', $author = '', $gravatar = '';
 
     public function __construct(array $options) {
 
@@ -14,19 +16,19 @@ class Chat {
             }
         }
     }
-	
-	public function save(){
-		DB::query("
+
+    public function save() {
+        DB::query("
 			INSERT INTO chat (author, gravatar, text)
 			VALUES (
-				'".DB::esc($this->author)."',
-				'".DB::esc($this->gravatar)."',
-				'".DB::esc($this->text)."'
+				'" . DB::esc($this->author) . "',
+				'" . DB::esc($this->gravatar) . "',
+				'" . DB::esc($this->text) . "'
 		)");
-		
-		
-		
-		return DB::getMySQLiObject();
-	}
+
+
+
+        return DB::getMySQLiObject();
+    }
 
 }

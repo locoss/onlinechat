@@ -171,10 +171,6 @@ input#chatText{
 	width:385px;
 }
 
-
-/* Overloading the default styles of jScrollPane */
-
-
 .jspVerticalBar{
 	background:none;
 	width:20px;

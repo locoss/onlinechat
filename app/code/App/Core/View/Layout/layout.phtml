@@ -1,58 +1,73 @@
-<?php 
+<?php
 $url = Chat\Framework\Bootstrap::BaseUrl();
 ?>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>Making an Web Chat</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Online Chat By Alex</title>
 
         <link rel="stylesheet" type="text/css" href="<?php echo $url ?>/skin/js/jScrollPane/jScrollPane.css" />
         <link rel="stylesheet" type="text/css" href="<?php echo $url ?>/skin/css/page.css" />
         <link rel="stylesheet" type="text/css" href="<?php echo $url ?>/skin/css/chat.css" />
-	<script>
-	function getBaseUrl(){
-		return "<?php echo $url; ?>";
-	}
-	</script>
+
+        <!-- Latest compiled and minified CSS -->
+        <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+       -->
+        <script>
+            function getBaseUrl() {
+                return "<?php echo $url; ?>";
+            }
+        </script>
     </head>
 
     <body>
 
-        <div id="chatContainer">
 
-            <div id="chatTopBar" class="rounded"></div>
-            <div id="chatLineHolder">
+        <! --bootstrap begining-->
+
+        <div class="container-fluid">
+            <div id="chatContainer">
+                <div id="chatTopBar" class="rounded"></div>
+                <div id="chatLineHolder"></div>
+                <div id="chatUsers" class="rounded"> 
+                </div>
+                <div id="chatBottomBar" class="rounded">
+                    <div class="tip"></div>
+
+                    <form id="loginForm" method="post" action="">
+                        <input id="name" name="name" class="rounded" maxlength="16" />
+                        <input id="email" name="email" class="rounded" />
+                        <input type="submit" class="blueButton" value="Login" />
+                    </form>
+
+                    <form id="submitForm" method="post" action="">
+                        <input id="chatText" name="chatText" class="rounded" maxlength="255" />
+                        <input type="submit" class="blueButton" value="Submit" />
+                    </form>
+                </div>
             </div>
-
-            <div id="chatUsers" class="rounded"> 
-            </div>
-            <div id="chatBottomBar" class="rounded">
-                <div class="tip"></div>
-
-                <form id="loginForm" method="post" action="">
-                    <input id="name" name="name" class="rounded" maxlength="16" />
-                    <input id="email" name="email" class="rounded" />
-                    <input type="submit" class="blueButton" value="Login" />
-                </form>
-
-                <form id="submitForm" method="post" action="">
-                    <input id="chatText" name="chatText" class="rounded" maxlength="255" />
-                    <input type="submit" class="blueButton" value="Submit" />
-                </form>
-
-            </div>
-
         </div>
 
+
+        <! --bootstrap end  -->
+        
+        
         <div id="footer">
             <div class="tri"></div>
             <h1></h1> 
         </div>
 
+
+
+
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
         <script src="<?php echo $url ?>/skin/js/jScrollPane/jquery.mousewheel.js"></script>
         <script src="<?php echo $url ?>/skin/js/jScrollPane/jScrollPane.min.js"></script>
         <script src="<?php echo $url ?>/skin/js/script.js"></script>
+         <!-- Latest compiled and minified JavaScript -->
+       <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script> 
+-->
     </body>
 </html>

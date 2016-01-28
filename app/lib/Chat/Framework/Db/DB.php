@@ -8,16 +8,16 @@ class DB {
     private $MySQLi;
 
     private function __construct(array $dbOptions) {
-		try{
-			$this->MySQLi = @ new \mysqli($dbOptions['db_host'], $dbOptions['db_user'], $dbOptions['db_pass'], $dbOptions['db_name']);
+        try {
+            $this->MySQLi = @ new \mysqli($dbOptions['db_host'], $dbOptions['db_user'], $dbOptions['db_pass'], $dbOptions['db_name']);
 
-			if ($this->MySQLi->connect_errno == null) {
-				throw new \Exception('Database error.');
-			}
-			$this->MySQLi->set_charset("utf8");
-		}catch(\Exception $e){
-			$e->getMessage();
-		}
+            if ($this->MySQLi->connect_errno == null) {
+                throw new \Exception('Database error.');
+            }
+            $this->MySQLi->set_charset("utf8");
+        } catch (\Exception $e) {
+            $e->getMessage();
+        }
     }
 
     public static function init(array $dbOptions) {
