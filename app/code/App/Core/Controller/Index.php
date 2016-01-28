@@ -22,25 +22,26 @@ class Index {
     public function loginAction() {
         $name = $_POST['name'];
         $email = $_POST['email'];
+        
         try {
             if (!$name || !$email) {
                 throw new \Exception('Fill in all the required fields.');
             }
 
             if (!filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL)) {
-                throw new \Exception('Your email is invalid.');
+                //throw new \Exception('Your email is invalid.');
             }
 
             $gravatar = md5(strtolower(trim($email)));
-
-            $user = new \Chat\App\Core\Model\User(array(
-                'name' => $name,
-                'gravatar' => $gravatar
-            ));
-
-            if ($user->save()->affected_rows != 1) {
-                throw new \Exception('This nick is in use.');
-            }
+            $user = new \Chat\App\Core\Model\User();
+            
+            $user->setName($name);
+            $user->setGravatar($gravatar);
+            $user->save();
+            //if ($user->affected_rows != 1) {
+               //throw new \Exception('This nick is in use.');
+            //}
+            
 
             $response = array(
                 'status' => 1,
@@ -52,9 +53,6 @@ class Index {
                 'name' => $name,
                 'gravatar' => self::gravatarFromHash($gravatar)
             );
-
-
-
 
             $this->response = json_encode($response);
 
@@ -122,7 +120,8 @@ class Index {
 
     public function getusersAction() {
         if ($_SESSION['user']['name']) {
-            $user = new \Chat\App\Core\Model\User(array('name' => $_SESSION['user']['name']));
+            $user = new \Chat\App\Core\Model\User();
+            $user->setName($_SESSION['user']['name']);
             $user->update();
         }
 
