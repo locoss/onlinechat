@@ -11,10 +11,11 @@ class DbTable {
     protected static $query;
     protected static $init;
 
-    CONST SAVE_FILE = 0;
+    CONST SAVE_FILE = 1;
 
     public static function getArray($init) {
         self::fillTable($init);
+
         return self::$table;
     }
 
@@ -41,12 +42,30 @@ class DbTable {
     public static function save($init, $data, $query) {
         self::$query = $query;
         self::$init = $init;
-       
+
         if (self::SAVE_FILE != 1) {
-            self::saveFile($data);
+            return self::saveFile($data);
         } else {
-            self::saveDb($data);
+            return self::saveDb($data);
         }
+    }
+    
+    public static function collection($init, $data, $query){
+        self::$query = $query;
+        self::$init = $init;
+        
+        self::convertData($data);
+
+        self::getQuery();
+        $query = self::$query;
+        
+        echo $query;
+        $object = DB::query($query);
+        
+        
+        
+        var_dump($object->fetch_object());
+        die();
     }
 
     protected static function saveFile($data) {
@@ -74,13 +93,14 @@ class DbTable {
 
     protected static function saveDb($data) {
         $init = self::$init;
-        
+
         self::convertData($data);
-        
+
         self::getQuery();
         $query = self::$query;
-       
-        DB::query($query);
+
+        return DB::query($query);
+        
     }
 
     public static function getQuery() {
@@ -88,12 +108,14 @@ class DbTable {
         $cdata = self::$_data;
         switch (self::$query) {
             case 'save':
+                
                 self::$query = "
 			INSERT INTO " . $init . " (" . $cdata['keys'] . ")
 			VALUES (
 				" . $cdata['values'] . "	
 		)";
                 break;
+
             case 'update':
                 self::$query = "
 			INSERT INTO " . $init . " (" . $cdata['keys'] . ")
@@ -101,29 +123,55 @@ class DbTable {
 				" . $cdata['values'] . "
 			) ON DUPLICATE KEY UPDATE last_activity = NOW()";
                 break;
+
+            case 'collection':
+                $query = "SELECT * FROM " . $init;
+                if (isset($cdata['order'])) {
+                    $query .= " ORDER BY " . $cdata['order'];
+                }
+                if ($cdata['sort']) {
+                    $query .= " " . $cdata['sort'];
+                }
+
+                if ($cdata['limit']) {
+                    $query .= " LIMIT " . $cdata['limit'];
+                }
+
+                self::$query = $query;
+                break;
+
             case 'delete':
                 self::$query = "DELETE FROM " . $init . " WHERE " . $cdata['keys'] . " = " . $cdata['values'] . "";
                 break;
+
             default:
                 throw new \Exception('Wrong query');
         }
     }
 
     public static function convertData($data) {
-        
+
         if (is_array($data)) {
             $keys = '';
             $values = '';
-            foreach ($data as $key => $value) {
-                $keys .= $key . ', ';
-                $values .= "'" . DB::esc($value) . "',";
+
+            if (self::$query != 'collection') {
+
+
+                foreach ($data as $key => $value) {
+                    //if ($value != '') {
+                    $keys .= $key . ', ';
+                    $values .= "'" . DB::esc($value) . "',";
+                    //}
+                }
+
+                $keys = substr(trim($keys), 0, -1);
+                $values = substr(trim($values), 0, -1);
+
+                self::$_data = array('keys' => $keys, 'values' => $values);
+            } else {
+                self::$_data = $data;
             }
-
-            $keys = substr(trim($keys), 0, -1);
-            $values = substr(trim($values), 0, -1);
-
-            self::$_data = array('keys' => $keys, 'values' => $values);
-            
         } else {
             self::$_data = DB::esc($data);
         }

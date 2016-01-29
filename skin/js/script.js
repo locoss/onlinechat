@@ -190,6 +190,7 @@ var chat = {
         if (!chat.data.lastID) {
             $('#chatLineHolder p').remove();
         }
+        
         if (params.id.toString().charAt(0) != 't') {
             var previous = $('#chatLineHolder .chat-' + (+params.id - 1));
             if (previous.length) {

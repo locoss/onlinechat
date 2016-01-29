@@ -11,14 +11,25 @@ class AModel extends Object {
     protected $init;
     protected $query;
     protected $delete_id;
+    protected $_resource;
+    protected $_object;
 
     public function __construct() {
-        $this->insertData(Resource::initTable($this->init));
-        return $this;
+       // $this->insertData(Resource::initTable($this->init));
+       // return $this;
     }
     
     protected function _init($table) {
         $this->init = $table;
+    }
+    
+    protected function collection(){
+        $data = $this->getData();
+        $returned_data = Resource::collection($this->init, $data, $this->query);
+        if($returned_data){
+            $this->_data = $returned_data;
+        }
+        return $this;
     }
 
     
@@ -29,16 +40,17 @@ class AModel extends Object {
             $this->query = 'save';
         }
         
-        Resource::save($this->init, $data, $this->query);
-        
+        $this->_resource = Resource::save($this->init, $data, $this->query);
 
+        $this->_object = DB::getMySQLiObject();
+        
         return $this;
     }
 
     public function update() {
         $this->query = 'update';
-        $this->save();
-        return $this;
+        //$this->save();
+        return $this->save();
     }
     
     public function delete($delete_id) {
@@ -62,21 +74,25 @@ class AModel extends Object {
     }
 
     public function getCollection($order_by, $sort, $limit) {
-        $query = "SELECT * FROM " . $this->init;
-
-        if ($order_by) {
-            $query .= " ORDER BY " . $order_by;
-        }
-        if ($sort) {
-            $query .= " " . $sort;
-        }
-
-        if ($limit) {
-            $query .= " LIMIT " . $limit;
-        }
-
-
-        return DB::query($query);
+        $this->query = 'collection';
+        $this->_data = array(
+            'order' => $order_by,
+            'sort' => $sort,
+            'limit' => $limit
+        );
+        
+        $this->collection();
+        
+        return $this;
+       
+    }
+    
+    public function getMysqlObject(){
+        return $this->_object;
+    }
+    
+    public function getResource(){
+        return $thix->_resource;
     }
 
 }

@@ -45,7 +45,7 @@ class Index {
             }
 
             if (!filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL)) {
-                //throw new \Exception('Your email is invalid.');
+                throw new \Exception('Your email is invalid.');
             }
 
             $gravatar = md5(strtolower(trim($email)));
@@ -54,9 +54,9 @@ class Index {
             $user->setName($name);
             $user->setGravatar($gravatar);
             $user->save();
-            //if ($user->affected_rows != 1) {
-            //throw new \Exception('This nick is in use.');
-            //}
+            if ($user->getMysqlObject()->affected_rows != 1) {
+                throw new \Exception('This nick is in use.');
+            }
 
 
             $response = array(
@@ -108,22 +108,25 @@ class Index {
     }
 
     public function submitchatAction() {
-        $chatText = $_POST['chatText'];
+   
+        
+       $chatText = $_POST['chatText'];
         try {
+           
             if (!$_SESSION['user']) {
                 throw new \Exception('You are not logged in');
             }
+
 
             if (!$chatText) {
                 throw new \Exception('You haven\' entered a chat message.');
             }
             $chatText = Helper::clean($chatText);
-            $chat = new \Chat\App\Core\Model\Chat(array(
-                'author' => $_SESSION['user']['name'],
-                'gravatar' => $_SESSION['user']['gravatar'],
-                'text' => $chatText
-            ));
-
+            $chat = new \Chat\App\Core\Model\Chat();
+            
+            $chat->setAuthor($_SESSION['user']['name']);
+            $chat->setGravatar($_SESSION['user']['gravatar']);
+            $chat->setText($chatText);
 
             $insertID = $chat->save()->insert_id;
             $response = array(
@@ -139,21 +142,28 @@ class Index {
 
     public function getusersAction() {
         $user = new \Chat\App\Core\Model\User();
-        if ($_SESSION['user']['name']) {
+        
+        /*if ($_SESSION['user']['name']) {
             $user->setName($_SESSION['user']['name']);
             $user->update();
-        }
-        DB::query("DELETE FROM chat WHERE ts < SUBTIME(NOW(),'0:5:0')");
-        DB::query("DELETE FROM users WHERE last_activity < SUBTIME(NOW(),'0:0:30')");
+        }*/
+        //DB::query("DELETE FROM chat WHERE ts < SUBTIME(NOW(),'0:5:0')");
+        //DB::query("DELETE FROM users WHERE last_activity < SUBTIME(NOW(),'0:0:30')");
 
-        $result = $user->getCollection('name', 'ASC', 18);
+        $collection = $user->getCollection('name', 'ASC', 18);
+        
+        $result = $user->getResource();
+        
         // $result = DB::query('SELECT * FROM users ORDER BY name ASC LIMIT 18');
-
+        var_dump($collection);
         $users = array();
+        
         while ($user = $result->fetch_object()) {
             $user->gravatar = self::gravatarFromHash($user->gravatar, 30);
             $users[] = $user;
         }
+        
+        
 
         $response = array(
             'users' => $users,

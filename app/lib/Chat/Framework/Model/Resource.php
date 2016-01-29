@@ -19,6 +19,10 @@ class Resource {
         return DBTable::save($init, $data, $query);
     }
     
+    public static function collection($init, $data, $query){
+        return DbTable::collection($init, $data, $query);
+    }
+    
     
 
 }

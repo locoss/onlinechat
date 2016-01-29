@@ -16,6 +16,7 @@ class Object {
             case 'set' :
                 $key = $this->_format(substr($method, 3));
                 $result = $this->setData($key, isset($args[0]) ? $args[0] : null);
+                
                 return $result;
         }
         echo 'This Method is undefined';
@@ -34,8 +35,9 @@ class Object {
     }
 
     protected function setData($key, $value) {
-        if (isset($this->_data[$key]))
+       // if (isset($this->_data[$key])){
             $this->_data[$key] = $value;
+       // }
     }
 
     protected function insertData($data) {

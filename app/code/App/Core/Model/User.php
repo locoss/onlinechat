@@ -16,10 +16,8 @@ class User extends AModel {
         if ($_SESSION['user']) {
             $this->name = $_SESSION['name'];
             $this->gravatar = $_SESSION['gravatar'];
-            return true;
-        } else {
-            return false;
-        }
+        } 
+        return $this;
     }
 
 }
