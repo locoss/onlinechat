@@ -12,7 +12,16 @@ class Index {
     public $response;
 
     public function __construct($action) {
-        $this->$action();
+        try{
+            if(method_exists($this, $action)){
+                $this->$action();
+            }else{
+                throw new \Exception('Wrong Action. You have been redirected to Main Page');
+            }
+        }catch(\Exception $e){
+            //$this->response = $e->getMessage();
+            $this->indexAction();
+        }
     }
 
     public function indexAction() {
@@ -20,12 +29,18 @@ class Index {
     }
 
     public function loginAction() {
-        $name = $_POST['name'];
-        $email = $_POST['email'];
-         $name = 'Alex';
-         $email = 'lidhen@list.ru';
+        if(isset($_POST['name']) && isset($_POST['name'])){
+            if(trim($_POST['name']) != '' && trim($_POST['email'])){
+                $name = trim($_POST['name']);
+                $email = trim($_POST['email']);
+            }
+            
+        }
+        
+         //$name = 'Alex';
+         //$email = 'lidhen@list.ru';
         try {
-            if (!$name || !$email) {
+            if (!isset($name) || !isset($email)) {
                 throw new \Exception('Fill in all the required fields.');
             }
 
@@ -38,7 +53,6 @@ class Index {
 
             $user->setName($name);
             $user->setGravatar($gravatar);
-           // $user->setLastActivity();
             $user->save();
             //if ($user->affected_rows != 1) {
             //throw new \Exception('This nick is in use.');
@@ -60,7 +74,7 @@ class Index {
 
             return $this->response;
         } catch (\Exception $e) {
-            $e->getMessage();
+            $this->response = json_encode(array('error' => $e->getMessage()));
         }
     }
 
@@ -81,16 +95,16 @@ class Index {
     public function logoutAction() {
 
         $session_user_name = $_SESSION['user']['name'];
+        
         $user = new \Chat\App\Core\Model\User();
+        $user->setName($session_user_name);
+        
+        $user->delete('name');
 
-        $user->delete('name', $session_user_name);
-
-        /* $_SESSION = array();
-          unset($_SESSION); */
         session_unset();
         $this->response = json_encode(array('status' => 1));
         header('Location: ' . $_SERVER['HTTP_REFERER']);
-        //return $this->response;
+        
     }
 
     public function submitchatAction() {

@@ -1,5 +1,5 @@
 --
--- Table structure for table `webchat_lines`
+-- Table structure for table `chat`
 --
 
 CREATE TABLE `chat` (
@@ -7,6 +7,7 @@ CREATE TABLE `chat` (
   `author` varchar(16) NOT NULL,
   `gravatar` varchar(32) NOT NULL,
   `text` varchar(255) NOT NULL,
+  `filename` varchar(32) NOT NULL,
   `ts` timestamp NOT NULL default CURRENT_TIMESTAMP,
   PRIMARY KEY  (`id`),
   KEY `ts` (`ts`)
@@ -15,13 +16,14 @@ CREATE TABLE `chat` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `webchat_users`
+-- Table structure for table `users`
 --
 
 CREATE TABLE `users` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `name` varchar(16) NOT NULL,
   `gravatar` varchar(32) NOT NULL,
+  `homepage` varchar(32) NOT NULL,
   `last_activity` timestamp NOT NULL default CURRENT_TIMESTAMP,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `name` (`name`),

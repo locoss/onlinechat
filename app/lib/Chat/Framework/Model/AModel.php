@@ -9,51 +9,56 @@ use Chat\Framework\Db\DB as DB;
 class AModel extends Object {
 
     protected $init;
+    protected $query;
+    protected $delete_id;
 
     public function __construct() {
         $this->insertData(Resource::initTable($this->init));
         return $this;
     }
-
-    public function load($id) {
-        $this->insertData(Resource::load($id));
-        return $this;
+    
+    protected function _init($table) {
+        $this->init = $table;
     }
+
+    
 
     public function save() {
         $data = $this->getData();       
+        if(!$this->query){
+            $this->query = 'save';
+        }
         
-        Resource::save($this->init, $data);
+        Resource::save($this->init, $data, $this->query);
+        
 
         return $this;
     }
 
     public function update() {
-
-        $keys = '';
-        foreach ($this->getData() as $key => $value) {
-            $keys .= $key . ', ';
-            $values .= "'" . DB::esc($value) . "',";
+        $this->query = 'update';
+        $this->save();
+        return $this;
+    }
+    
+    public function delete($delete_id) {
+        $this->query = 'delete';
+        $this->delete_id = $delete_id;
+        $data = $this->_data[$delete_id];
+        
+        foreach($this->_data as $key => $value){
+            if($value != ''){
+                $this->_data[$key] = '';
+            }
+            
         }
-
-        $keys = substr(trim($keys), 0, -1);
-        $values = substr(trim($values), 0, -1);
-        $query = "
-			INSERT INTO " . $this->init . " (" . $keys . ")
-			VALUES (
-				" . $values . "
-			) ON DUPLICATE KEY UPDATE last_activity = NOW()";
-
-
-        DB::query($query);
+        $this->_data = array($this->delete_id => $data); 
+        $this->save();
     }
 
-    protected function _init($table) {
-        $this->init = $table;
-    }
-
-    public function delete($field, $match) {
-        DB::query("DELETE FROM " . $this->init . " WHERE " . $field . " = '" . DB::esc($match) . "'");
+    public function load($id) {
+        $this->insertData(Resource::load($id));
+        return $this;
     }
 
     public function getCollection($order_by, $sort, $limit) {

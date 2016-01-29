@@ -15,8 +15,10 @@ class Resource {
         return DbTable::getArray($init);
     }
 
-    public static function save($init, $keys, $values) {
-        return DBTable::save($init, $keys, $values);
+    public static function save($init, $data, $query) {
+        return DBTable::save($init, $data, $query);
     }
+    
+    
 
 }
