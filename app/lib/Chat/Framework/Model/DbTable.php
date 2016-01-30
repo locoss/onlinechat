@@ -11,8 +11,6 @@ class DbTable {
     protected static $query;
     protected static $init;
 
-    CONST SAVE_FILE = 1;
-
     public static function getArray($init) {
         self::fillTable($init);
 
@@ -42,12 +40,9 @@ class DbTable {
     public static function save($init, $data, $query) {
         self::$query = $query;
         self::$init = $init;
-
-        if (self::SAVE_FILE != 1) {
-            return self::saveFile($data);
-        } else {
-            return self::saveDb($data);
-        }
+        
+        return self::saveDb($data);
+        
     }
     
     public static function collection($init, $data, $query){
@@ -57,49 +52,24 @@ class DbTable {
         self::convertData($data);
 
         self::getQuery();
+        
         $query = self::$query;
         
-        echo $query;
-        $object = DB::query($query);
+        $result =  DB::query($query); 
         
-        
-        
-        var_dump($object->fetch_object());
-        die();
-    }
-
-    protected static function saveFile($data) {
-        $init = self::$init;
-        $filename_schema = __DIR__ . '/Database/' . $init . '_schema.json';
-        $filename_database = __DIR__ . '/Database/' . $init . '.json';
-
-        $schema = file_get_contents($filename_schema);
-
-        $table_schema = json_decode($schema, true);
-
-        $database = file_get_contents($filename_database);
-        $table_database = json_decode($database, true);
-
-
-        if (is_array($table_database)) {
-            array_push($table_database, $data);
-        } else {
-            $data['id'] = 1;
-            $table_database = array($data);
+        while ($user = $result->fetch_object()) {
+            $users[] = $user;
         }
-
-        file_put_contents($filename_database, json_encode($table_database));
+        return $users;
     }
 
     protected static function saveDb($data) {
         $init = self::$init;
 
         self::convertData($data);
-
         self::getQuery();
-        $query = self::$query;
 
-        return DB::query($query);
+        return DB::query(self::$query);
         
     }
 
@@ -129,11 +99,11 @@ class DbTable {
                 if (isset($cdata['order'])) {
                     $query .= " ORDER BY " . $cdata['order'];
                 }
-                if ($cdata['sort']) {
+                if (isset($cdata['sort'])) {
                     $query .= " " . $cdata['sort'];
                 }
 
-                if ($cdata['limit']) {
+                if (isset($cdata['limit'])) {
                     $query .= " LIMIT " . $cdata['limit'];
                 }
 
@@ -156,8 +126,6 @@ class DbTable {
             $values = '';
 
             if (self::$query != 'collection') {
-
-
                 foreach ($data as $key => $value) {
                     //if ($value != '') {
                     $keys .= $key . ', ';
@@ -175,6 +143,10 @@ class DbTable {
         } else {
             self::$_data = DB::esc($data);
         }
+    }
+    
+    public static function getObject(){
+        return DB::getMySQLiObject();
     }
 
 }

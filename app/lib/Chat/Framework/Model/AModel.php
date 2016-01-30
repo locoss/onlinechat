@@ -27,9 +27,25 @@ class AModel extends Object {
         $data = $this->getData();
         $returned_data = Resource::collection($this->init, $data, $this->query);
         if($returned_data){
-            $this->_data = $returned_data;
+            $this->_resource = $returned_data;
+            $this->_object = Resource::getObject();
         }
+        
         return $this;
+    }
+    
+    public function getResponse(){
+        $collection = array();
+        foreach($this->_resource as $object){
+            $collection[] = $object;
+        }
+
+        $response = array(
+            $this->init => $collection,
+            'total' => count($collection)
+        );
+
+        return json_encode($response);
     }
 
     
@@ -39,17 +55,15 @@ class AModel extends Object {
         if(!$this->query){
             $this->query = 'save';
         }
-        
         $this->_resource = Resource::save($this->init, $data, $this->query);
-
-        $this->_object = DB::getMySQLiObject();
+        //$this->_object = DB::getMySQLiObject();
+        $this->_object = Resource::getObject();
         
         return $this;
     }
 
     public function update() {
         $this->query = 'update';
-        //$this->save();
         return $this->save();
     }
     
@@ -73,26 +87,21 @@ class AModel extends Object {
         return $this;
     }
 
-    public function getCollection($order_by, $sort, $limit) {
+    public function getCollection($array) {
         $this->query = 'collection';
-        $this->_data = array(
-            'order' => $order_by,
-            'sort' => $sort,
-            'limit' => $limit
-        );
+        $this->_data = $array;
         
         $this->collection();
-        
         return $this;
        
     }
     
-    public function getMysqlObject(){
+    public function getObject(){
         return $this->_object;
     }
     
     public function getResource(){
-        return $thix->_resource;
+        return $this->_resource;
     }
 
 }

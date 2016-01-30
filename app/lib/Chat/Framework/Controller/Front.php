@@ -32,6 +32,9 @@ class Front {
         $routers = $this->config['routers'];
         if (array_key_exists($request[0], $routers)) {
             $class_name = $routers[$request[0]];
+            if(!isset($request[1])){
+                $request[1] = 'index';
+            }
             $action = $request[1] . "Action";
             $controller = new $class_name($action);
         } else {
