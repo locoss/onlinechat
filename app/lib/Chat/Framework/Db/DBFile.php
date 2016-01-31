@@ -71,7 +71,7 @@ class DBFile {
         }
         
         if(self::$instance->_init == 'chat'){
-            $data['ts'] = time();
+            $data['ts'] = date("d-m-Y H:i:s");  ;
         }
 
         if (is_array($table_database)) {
