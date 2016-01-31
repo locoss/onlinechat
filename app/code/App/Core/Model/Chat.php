@@ -13,13 +13,8 @@ class Chat extends AModel {
     }
 
     public function getChatSubmitResponse() {
-
-        if ($this->_object instanceof \mysqli) {
-            $insertID = $this->_object->insert_id;
-        } else {
-            $insertID = 1;
-        }
-
+        $object = $this->getObject();
+        $insertID = $object->insert_id;
         $response = array(
             'status' => 1,
             'insertID' => $insertID
@@ -30,18 +25,14 @@ class Chat extends AModel {
 
     public function getChatsResponse() {
         $chats = array();
-
         foreach ($this->getResource() as $chat) {
             $chat->time = array(
                 'hours' => gmdate('H', strtotime($chat->ts)),
                 'minutes' => gmdate('i', strtotime($chat->ts))
             );
-
             $chat->gravatar = Helper::gravatarFromHash($chat->gravatar);
-
             $chats[] = $chat;
         }
-
         $response = array('chats' => $chats);
 
         return json_encode($response);

@@ -2,8 +2,8 @@
 
 namespace Chat\Framework\Model;
 
-use Chat\Framework\Model\DbTable as DbTable;
-//use Chat\Framework\Model\File as DbTable;
+//use Chat\Framework\Model\DbTable as DbTable;
+use Chat\Framework\Model\File as DbTable;
 //use Chat\Framework\Db\DB as DB;
 
 class Resource {
@@ -13,7 +13,7 @@ class Resource {
     }
 
     public static function load($id) {
-        return DbTable::getArrayById($id);
+        return DbTable::load($id);
     }
     
     public static function loadByFieldName($field_name, $field_value){

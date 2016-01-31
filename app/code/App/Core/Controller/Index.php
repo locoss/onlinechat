@@ -23,6 +23,17 @@ class Index {
             $this->indexAction();
         }
     }
+    public function testAction(){
+      
+        $chat_model = new \Chat\App\Core\Model\Chat();
+        $chat_model->getCollection(array(
+            'order' => 'id',
+            'sort' => 'ASC',
+        ));
+
+        $this->response = $chat_model->getChatsResponse();
+        
+    }
 
     public function indexAction() {
         $this->view = new View();
@@ -35,30 +46,41 @@ class Index {
                 $email = trim($_POST['email']);
             }
         }
-//$name = 'Alex';
-//$email = 'lidhen@list.ru';
+
         try {
             if (!isset($name) || !isset($email)) {
                 throw new \Exception('Fill in all the required fields.');
             }
 
             if (!filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL)) {
-                throw new \Exception('Your email is invalid.');
+               // throw new \Exception('Your email is invalid.');
             }
 
             $gravatar = md5(strtolower(trim($email)));
             $user = new \Chat\App\Core\Model\User();
             $user->setName($name);
             $user->setGravatar($gravatar);
+$homepage = 'vk.com';
+            if (isset($homepage)) { // $_POST['homepage]
+                $homepage = Helper::getRightUrl(trim($homepage)); // $_POST['homepage]
+                $user->setHomepage($homepage);
+            }
+
             $user->save();
 
             if ($user->getObject()->affected_rows != 1) {
                 throw new \Exception('This nick is in use.');
             }
-            $_SESSION['user'] = array(
+            
+            $session_data = array(
                 'name' => $user->getName(),
                 'gravatar' => Helper::gravatarFromHash($user->getGravatar())
             );
+            
+            if($user->getHomepage()){
+                array_push($session_data, array('homepage' => $user->getHomepage()));
+            }
+            $_SESSION['user'] = $session_data;
             $this->response = $user->getLoginResponse();
 
             return $this->response;
@@ -109,8 +131,9 @@ class Index {
                 array(
                     'order' => 'name',
                     'sort' => 'ASC',
-                    'limit' => 18
+                    'limit' => 10
         ));
+        
         $this->response = $user->getResponse();
 
         return $this->response;
@@ -120,7 +143,7 @@ class Index {
         $chat_model = new \Chat\App\Core\Model\Chat();
         $chat_model->getCollection(array(
             'order' => 'id',
-            'sort' => 'ASC'
+            'sort' => 'ASC',
         ));
 
         $this->response = $chat_model->getChatsResponse();

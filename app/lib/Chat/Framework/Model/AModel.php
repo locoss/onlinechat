@@ -51,12 +51,15 @@ class AModel extends Object {
     
 
     public function save() {
+        
         $data = $this->getData();       
         if(!$this->query){
             $this->query = 'save';
         }
+        
         $this->_resource = Resource::save($this->init, $data, $this->query);
-        //$this->_object = DB::getMySQLiObject();
+        
+       // $this->_object = DB::getMySQLiObject();
         $this->_object = Resource::getObject();
         
         return $this;

@@ -2,7 +2,6 @@
 
 namespace Chat\App\Core\Model;
 
-use Chat\Framework\Db\DB as DB;
 use Chat\Framework\Model\AModel as AModel;
 use Chat\App\Core\Helper\Helper as Helper;
 

@@ -3,13 +3,9 @@
 namespace Chat\Framework\Model;
 
 use Chat\Framework\Db\DB as DB;
+use Chat\Framework\Model\AbstractData\AbstractData as AbstractData;
 
-class DbTable {
-
-    protected static $table;
-    protected static $_data;
-    protected static $query;
-    protected static $init;
+class DbTable extends  AbstractData{
 
     public static function getArray($init) {
         self::fillTable($init);
@@ -17,12 +13,14 @@ class DbTable {
         return self::$table;
     }
 
-    public static function getArrayById($id) {
-        $_array = array(
+    public static function load($id) {
+       /* $_array = array(
             1 => array('name' => 'Alex', 'email' => 'lidhen@list.ru'),
         );
 
         return (isset($_array[$id])) ? $_array[$id] : null;
+        
+        */
     }
 
     protected static function fillTable($init) {
@@ -68,12 +66,12 @@ class DbTable {
 
         self::convertData($data);
         self::getQuery();
-
+        
         return DB::query(self::$query);
         
     }
 
-    public static function getQuery() {
+    protected static function getQuery() {
         $init = self::$init;
         $cdata = self::$_data;
         switch (self::$query) {
@@ -119,7 +117,7 @@ class DbTable {
         }
     }
 
-    public static function convertData($data) {
+    protected static function convertData($data) {
 
         if (is_array($data)) {
             $keys = '';

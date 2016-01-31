@@ -2,10 +2,11 @@
 
 namespace Chat\Framework;
 
-class Bootstrap {
+final class Bootstrap {
 
     protected static $config;
     protected $controller;
+    static private $_registry  = array();
 
     public static function app() {
         //session_name('chat');
@@ -46,6 +47,27 @@ class Bootstrap {
         $prefix = stripos($_SERVER['SERVER_PROTOCOL'], 'https') === true ? 'https://' : 'http://';
 
         return $prefix . URL;
+    }
+    
+    public static function register($key, $data){
+        self::$_registry[$key] = $data;
+    }
+    
+    public static function registry($key){
+        if(isset(self::$_registry[$key])){
+            return self::$_registry[$key];
+        }else{
+            return false;
+        }
+    }
+    
+    public static function unregister($key){
+         if(isset(self::$_registry[$key])){
+            unset(self::$_registry[$key]);
+            return true;
+        }else{
+            return false;
+        }
     }
 
 }

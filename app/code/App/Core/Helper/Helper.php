@@ -17,5 +17,10 @@ class Helper {
         return 'http://www.gravatar.com/avatar/' . $hash . '?size=' . $size . '&amp;default=' .
                 urlencode('http://www.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?size=' . $size);
     }
+    
+    
+    public static function getRightUrl($url){
+        return $url;
+    }
 
 }
