@@ -6,17 +6,8 @@
 body{
 	color:#eee;
 	background:url('../img/page_bg.jpg') repeat-x #323232;
-	font:15px Calibri,Arial,sans-serif;
+	font:16px Calibri,Arial,sans-serif;
 	border-top:5px solid #212121;
-}
-
-#footer{
-	background-color:#212121;
-	position:fixed;
-	width:100%;
-	height:70px;
-	bottom:0;
-	left:0;
 }
 
 a.tzine,a.tzine:visited{

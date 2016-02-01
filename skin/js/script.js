@@ -204,11 +204,12 @@ var chat = {
 
 
         chat.data.jspAPI.reinitialise();
-        chat.data.jspAPI.scrollToBottom(true);
+        //chat.data.jspAPI.scrollToBottom(true);
 
     },
     getChats: function (callback) {
         $.tzGET('getchats', function (r) {
+            
             for (var i = 0; i < r.chats.length; i++) {
                 chat.addChatLine(r.chats[i]);
             }

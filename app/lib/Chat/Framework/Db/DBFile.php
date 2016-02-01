@@ -71,7 +71,8 @@ class DBFile {
         }
         
         if(self::$instance->_init == 'chat'){
-            $data['ts'] = date("d-m-Y H:i:s");  ;
+            $data['ts'] = date("Y-m-d H:i:s",strtotime('+1 hour'));  // if wrong time settings on server
+          //  $data['ts'] = date("Y-m-d H:i:s");
         }
 
         if (is_array($table_database)) {
@@ -86,7 +87,9 @@ class DBFile {
         foreach ($data as $prop => $pro_value) {
             $object->$prop = $pro_value;
         }
-        $object->insert_id = count($table_database) + 1;
+        
+        //$object->insert_id = count($table_database) + 1;
+        $object->insert_id = $object->id;
         $object->affected_rows = 1;
         self::$instance->object = $object;
         //\Chat\Framework\Bootstrap::register('object', $affected_rows);

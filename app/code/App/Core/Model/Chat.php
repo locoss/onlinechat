@@ -25,17 +25,23 @@ class Chat extends AModel {
 
     public function getChatsResponse() {
         $chats = array();
-        foreach ($this->getResource() as $chat) {
-            $chat->time = array(
-                'hours' => gmdate('H', strtotime($chat->ts)),
-                'minutes' => gmdate('i', strtotime($chat->ts))
-            );
-            $chat->gravatar = Helper::gravatarFromHash($chat->gravatar);
-            $chats[] = $chat;
-        }
-        $response = array('chats' => $chats);
+        if (is_array($this->getResource())) {
+            foreach ($this->getResource() as $chat) {
+                $chat->time = array(
+                  //  'hours' => gmdate('H', strtotime($chat->ts)), 
+                  //  'minutes' => gmdate('i', strtotime($chat->ts))
+                    'hours' => gmdate('H', strtotime($chat->ts) + 60 * 60),  // if wrong time settings on server
+                    'minutes' => gmdate('i', strtotime($chat->ts) + 60 * 60)  // if wrong time settings on server
+                );
+                $chat->gravatar = Helper::gravatarFromHash($chat->gravatar);
+                $chats[] = $chat;
+            }
+            $response = array('chats' => $chats);
 
-        return json_encode($response);
+            return json_encode($response);
+        }
+        
+        return null;
     }
 
 }

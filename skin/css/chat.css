@@ -1,8 +1,8 @@
 /* Main chat container */
 
 #chatContainer{
-	width:510px;
-	margin:100px auto;
+	width:610px;
+	margin:20px auto;
 	position:relative;
 }
 
@@ -38,17 +38,17 @@
 
 
 #chatLineHolder{
-	height:360px;
-	width:350px;
+	height:400px;
+	width:450px;
 	margin-bottom:20px;
 }
 
 .chat{
 	background:url('../img/chat_line_bg.jpg') repeat-x #d5d5d5;
-	min-height:24px;
+	min-height:35px;
 	padding:6px;
 	border:1px solid #FFFFFF;
-	
+	max-width: 380px;
 	padding:8px 6px 4px 37px;
 	position:relative;
 	margin:0 10px 10px 0;
@@ -167,7 +167,7 @@
 }
 
 input#chatText{
-	/* The chat submit text field */
+	
 	width:385px;
 }
 
@@ -195,8 +195,6 @@ input#chatText{
 	background-position:left bottom;
 }
 
-
-/* Additional styles */
 
 
 a.logoutButton{
@@ -252,6 +250,7 @@ p.noChats,
 
 #chatUsers .count{
 	font-size:11px;
+        color:#fff;
 }
 
 .rounded{
@@ -274,3 +273,6 @@ p.noChats,
 	
 	text-shadow:1px 1px 0 #940f0f;
 }
+
+
+

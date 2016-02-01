@@ -4,7 +4,7 @@ namespace Chat\Framework\Model;
 
 class Object {
 
-    protected $_data;
+    protected $_data = array('id' => null);
 
     public function __call($method, $args) {
         switch (substr($method, 0, 3)) {

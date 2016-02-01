@@ -13,8 +13,8 @@ $url = Chat\Framework\Bootstrap::BaseUrl();
         <link rel="stylesheet" type="text/css" href="<?php echo $url ?>/skin/css/chat.css" />
 
         <!-- Latest compiled and minified CSS -->
-        <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-       -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+       
         <script>
             function getBaseUrl() {
                 return "<?php echo $url; ?>";
@@ -27,7 +27,7 @@ $url = Chat\Framework\Bootstrap::BaseUrl();
 
         <! --bootstrap begining-->
 
-        <!--<div class="container-fluid">-->
+        <div class="container-fluid">
             <div id="chatContainer">
                 <div id="chatTopBar" class="rounded"></div>
                 <div id="chatLineHolder"></div>
@@ -36,7 +36,7 @@ $url = Chat\Framework\Bootstrap::BaseUrl();
                 <div id="chatBottomBar" class="rounded">
                     <div class="tip"></div>
 
-                    <form id="loginForm" method="post" action="">
+                    <form id="loginForm" method="post" action="" class="form-inline">
                         <input id="name" name="name" class="rounded" maxlength="16" />
                         <input id="email" name="email" class="rounded" />
                         <input type="submit" class="blueButton" value="Login" />
@@ -45,21 +45,11 @@ $url = Chat\Framework\Bootstrap::BaseUrl();
                     <form id="submitForm" method="post" action="">
                         <input id="chatText" name="chatText" class="rounded" maxlength="255" />
                         <input type="submit" class="blueButton" value="Submit" />
+                        <input id="file" name="file"  type="file" maxlength="255" />
                     </form>
                 </div>
             </div>
-      <!--  </div>-->
-
-
-        <! --bootstrap end  -->
-        
-        
-        <div id="footer">
-            <div class="tri"></div>
-            <h1></h1> 
-        </div>
-
-
+      </div>
 
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
@@ -67,7 +57,7 @@ $url = Chat\Framework\Bootstrap::BaseUrl();
         <script src="<?php echo $url ?>/skin/js/jScrollPane/jScrollPane.min.js"></script>
         <script src="<?php echo $url ?>/skin/js/script.js"></script>
          <!-- Latest compiled and minified JavaScript -->
-       <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script> 
--->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script> 
+
     </body>
 </html>
