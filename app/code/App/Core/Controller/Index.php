@@ -50,7 +50,7 @@ class Index {
                 }
                 $_SESSION['user'] = $session_data;
                 $this->response = $user->getLoginResponse();
-               // header('Location: ' . $_SERVER['HTTP_REFERER']);
+                // header('Location: ' . $_SERVER['HTTP_REFERER']);
                 //header('location: index');
                 //$this->indexAction();
 
@@ -60,7 +60,7 @@ class Index {
                 throw new \Exception('User with this name is not registered yet');
             }
         } catch (\Exception $e) {
-           // $this->response = json_encode(array('error' => $e->getMessage()));
+            // $this->response = json_encode(array('error' => $e->getMessage()));
             \Chat\Framework\Bootstrap::register('error', $e->getMessage());
             $this->indexAction();
         }
@@ -72,12 +72,12 @@ class Index {
         $view->setLayout();
         if ($_SESSION['user']['name']) {
             $view->getLayout()->setContent('content')->setHead('head');
-        }else{
+        } else {
             $view->getLayout()->setContent('login_content')->setHead('login_head');
         }
-        
-        
-        
+
+
+
         $this->view = $view;
     }
 
@@ -135,7 +135,7 @@ class Index {
             $this->_redirect = 'index';
             return $this;
         } catch (\Exception $e) {
-           // $this->response = json_encode(array('error' => $e->getMessage()));
+            // $this->response = json_encode(array('error' => $e->getMessage()));
             \Chat\Framework\Bootstrap::register('error', $e->getMessage());
             $this->indexAction();
         }
@@ -154,8 +154,7 @@ class Index {
         $this->response = json_encode($response);
         return $this->response;
     }
-    
-    
+
     public function logoutAction() {
 
         $session_user_name = $_SESSION['user']['name'];
@@ -171,19 +170,19 @@ class Index {
         $this->_redirect = $_SERVER['HTTP_REFERER'];
     }
 
-    /*public function logoutAction() {
+    /* public function logoutAction() {
 
-        $session_user_name = $_SESSION['user']['name'];
+      $session_user_name = $_SESSION['user']['name'];
 
-        $user = new \Chat\App\Core\Model\User();
-        $user->setName($session_user_name);
-        //$user->load('name', $session_user_name);
-        $user->delete('name');
+      $user = new \Chat\App\Core\Model\User();
+      $user->setName($session_user_name);
+      //$user->load('name', $session_user_name);
+      $user->delete('name');
 
-        session_unset();
-        $this->response = json_encode(array('status' => 1));
-        header('Location: ' . $_SERVER['HTTP_REFERER']);
-    }*/
+      session_unset();
+      $this->response = json_encode(array('status' => 1));
+      header('Location: ' . $_SERVER['HTTP_REFERER']);
+      } */
 
     public function getusersAction() {
         $user = new \Chat\App\Core\Model\User();
@@ -219,7 +218,7 @@ class Index {
 
     public function submitchatAction() {
         $chatText = $_POST['chatText'];
-
+        $file = $_POST['file'];
         try {
             if (!$_SESSION['user']) {
                 throw new \Exception('You are not logged in');
@@ -229,13 +228,9 @@ class Index {
                 throw new \Exception('You haven\' entered a chat message.');
             }
 
-            if (isset($_FILES["file"]['name'])) {
-              //  throw new \Exception('file');
-            }
-
             $chatText = Helper::clean($chatText);
             $chat = new \Chat\App\Core\Model\Chat();
-
+            $chat->setFilename($file);
             $chat->setAuthor($_SESSION['user']['name']);
             $chat->setGravatar($_SESSION['user']['gravatar']);
             $chat->setText($chatText);
@@ -250,10 +245,14 @@ class Index {
     }
 
     public function savefileAction() {
-        $path =  BASE_DIR . '/media/files/';
-        move_uploaded_file($_FILES['file']['tmp_name'], $path . $_FILES['file']['name']);
-        //$message = 'Congratulations!  Your file was accepted.';
-        //var_dump($_FILES);
+        $path = BASE_DIR . '/media/files/';
+
+        if ($_FILES['photo']['name']) {
+            //if no errors...
+            if (!$_FILES['photo']['error']) {
+                move_uploaded_file($_FILES['file']['tmp_name'], $path . $_FILES['file']['name']);
+            }
+        }
     }
 
 }

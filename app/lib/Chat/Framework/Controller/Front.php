@@ -56,7 +56,7 @@ class Front {
     }
 
     public function setLayout() {
-        $view = $this->getView();
+        return $this->getView();
         //$view->setLayout($this->config['view']);
     }
 

@@ -102,12 +102,12 @@ var chat = {
                 var fileflag = true;
 
                 if (filetype != 'txt') {
-                    //chat.displayError('The extension of your file is not accepted');
-                    //return false;
+                    chat.displayError('The extension of your file is not accepted');
+                    return false;
                 }
                 if (filesize > 100000) {
-                    //chat.displayError('The size of your file is more than 100 kb');
-                    //return false;
+                    chat.displayError('The size of your file is more than 100 kb');
+                    return false;
                 }
             }
             var text = $('#chatText').val();
@@ -132,20 +132,18 @@ var chat = {
 
 
             chat.addChatLine($.extend({}, params));
-
+            var sending_data = $(this).serialize();
             if (typeof file !== "undefined") {
                 var formdata = new FormData();
                 formdata.append("file", file);
                 var ajax = new XMLHttpRequest();
                 ajax.upload.addEventListener("progress", function(){}, false);
                 ajax.addEventListener("load", function(){}, false);
-                ajax.open("POST", "http://mycms/index/savefile");
-          
+                ajax.open("POST", getBaseUrl()+"/index/savefile");
                 ajax.send(formdata);
-                
+                sending_data = sending_data + '&file=' + filename;
             }
-
-            $.tzPOST('submitchat', $(this).serialize(), function (r) {
+            $.tzPOST('submitchat', sending_data, function (r) {
                 working = false;
                 if (r.error) {
                     chat.displayError(r.error);
@@ -227,10 +225,16 @@ var chat = {
                 break;
 
             case 'chatLine':
+                var file_html = '';
+                if(params.filename != null){
+                     file_html = '<p><span class="chat-file">File: <a href="'+getBaseUrl()+'/media/files/'+params.filename+'" target="_blank">'+params.filename+'</a></span><p>';
+                }
+                
                 arr = [
                     '<div class="chat chat-', params.id, ' rounded"><span class="gravatar"><img src="', params.gravatar,
                     '" width="23" height="23" onload="this.style.visibility=\'visible\'" />', '</span><span class="author">', params.author,
-                    ':</span><span class="text">', params.text, '</span><span class="time">', params.time, '</span></div>'];
+                    ':</span><span class="text">', params.text, '</span><span class="time">', params.time, '</span>\n\
+                        '+file_html+'</div>'];
                 break;
 
             case 'user':
@@ -318,7 +322,7 @@ var chat = {
                 nextRequest = 15000;
             }
 
-            setTimeout(callback, nextRequest);
+            //setTimeout(callback, nextRequest);
         });
     },
     getUsers: function (callback) {

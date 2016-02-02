@@ -1,0 +1,112 @@
+<?xml version='1.0'?>
+			<AccessRequest xml:lang='en-US'>
+  				<AccessLicenseNumber>ECEC23F8F7311E95</AccessLicenseNumber>
+  				<UserId>BBandB</UserId>
+  				<Password>zchntn@56</Password>
+			</AccessRequest> 
+			<?xml version='1.0'?>
+				<ShipmentConfirmRequest xml:lang='en-US'>
+  					<Request>
+    					<TransactionReference>
+      						<CustomerContext>Borrow Order UPS Label</CustomerContext>
+						    <XpciVersion/>
+					    </TransactionReference>
+					    <RequestAction>ShipConfirm</RequestAction>
+					    <RequestOption>validate</RequestOption>
+				  	</Request>
+  				  	<LabelSpecification>
+    				<LabelPrintMethod>
+					    <Code>GIF</Code>
+      					<Description>gif file</Description>
+				    </LabelPrintMethod>
+    				<HTTPUserAgent>Mozilla/4.5</HTTPUserAgent>
+				    <LabelImageFormat>
+      					<Code>GIF</Code>
+					    <Description>gif</Description>
+				    </LabelImageFormat>
+				    </LabelSpecification>
+					<Shipment>
+				    	  <ReturnService>
+						  	<Code>9</Code>
+						  </ReturnService>
+						   <RateInformation>
+						      <NegotiatedRatesIndicator/> 
+						    </RateInformation> 
+							<Description/>
+    <Shipper>
+      <Name><![CDATA[Bags A Porter]]></Name>
+      <PhoneNumber>888-599-BAGS (2247)</PhoneNumber>
+      <ShipperNumber>0425WY</ShipperNumber>
+      <TaxIdentificationNumber></TaxIdentificationNumber>
+      <Address>
+    	<AddressLine1><![CDATA[169 East Flagler Street - Suite 942]]></AddressLine1>
+    	<City>Miami</City>
+    	<StateProvinceCode>FL</StateProvinceCode>
+    	<PostalCode>33131</PostalCode>
+    	<PostcodeExtendedLow></PostcodeExtendedLow>
+    	<CountryCode>US</CountryCode>
+     </Address>
+    </Shipper>
+    <ShipFrom>
+      <CompanyName><![CDATA[Bags A Porter]]></CompanyName>
+      <AttentionName><![CDATA[Bags A Porter]]></AttentionName>
+      <PhoneNumber>888-599-BAGS (2247)</PhoneNumber>
+      <Address>
+    	<AddressLine1><![CDATA[169 East Flagler Street]]></AddressLine1>
+    	<City>Miami</City>
+    	<StateProvinceCode>FL</StateProvinceCode>
+    	<PostalCode>33131</PostalCode>
+    	<CountryCode>US</CountryCode>
+     </Address>
+    </ShipFrom>
+    <ShipTo>
+     <CompanyName><![CDATA[tentura]]></CompanyName>
+      <AttentionName><![CDATA[Artyom Kozinets]]></AttentionName>
+      <PhoneNumber>11111</PhoneNumber>
+   <!--          <Address>
+        <AddressLine1>795 E DRAGRAM</AddressLine1>
+        <City>TUCSON</City>
+    	<PostalCode>85705</PostalCode>
+    	<CountryCode>US</CountryCode>
+		<StateProvinceCode>AZ</StateProvinceCode>
+      </Address>
+-->
+     <Address>
+        <AddressLine1><![CDATA[Avenue 5]]></AddressLine1>
+        <City>NewYork</City>
+    	<PostalCode>11111</PostalCode>
+    	<CountryCode>US</CountryCode>
+    	<StateProvinceCode>AZ</StateProvinceCode>
+      </Address>
+    </ShipTo>
+     <PaymentInformation>
+      <Prepaid>
+        <BillShipper>
+          <AccountNumber>0425WY</AccountNumber>
+        </BillShipper>
+      </Prepaid>
+    </PaymentInformation>
+    <Service><!-- Values are: 01 = Next Day Air, 02 = 2nd Day Air, 03 = Ground, 07 = Express, 08 = Expedited, 11 = UPS Standard, 12 = 3 Day Select, 13 = Next Day Air Saver, 14 = Next Day Air Early AM, 54 = Express Plus, 59 = 2nd Day Air A.M., 65 = UPS Saver, M2= First Class Mail, M3 = Priority Mail, M4 = Expedited MaiI Innovations, M5 = Priority Mail Innovations, M6 = Economy Mail Innovations, 82 = UPS Today Standard, 83 = UPS Today Dedicated Courier, 84 = UPS Today Intercity, 85 = UPS Today Express, 86 = UPS Today Express Saver, 96 = UPS Worldwide Express Freight. -->
+      <Code>02</Code>
+      <Description>2nd Day Air</Description>
+    </Service>
+    <Package>
+      <PackagingType> <!-- Package types. Values are: 01 = UPS Letter, 02 = Customer SuppliedPackage, 03 =Tube, 04=PAK, 21 = UPS Express Box, 24 = UPS 25KG Box, 25 = UPS 10KG Box, 30 = Pallet, 2a = Small Express Box, 2b = Medium Express Box, 2c = Large Express Box, 56 = Flats, 57 = Parcels, 58 = BPM, 59 = First Class, 60 = Priority, 61 = Machinables, 62 = Irregulars, 63 = Parcel Post, 64 = BPM Parcel, 65 = Media Mail, 66 = BPM Flat, 67 = Standard Flat -->
+        <Code>02</Code>
+        <Description>Customer Supplied</Description>
+      </PackagingType>
+      <Description><![CDATA[Handbag Dolce & Gabbana BB5834C090]]></Description>
+	  <ReferenceNumber>
+	  	<Code>00</Code>
+		<Value>Package</Value>
+	  </ReferenceNumber>
+      <PackageWeight>
+        <UnitOfMeasurement/>
+        <Weight>2</Weight>
+      </PackageWeight>
+      <LargePackageIndicator/>
+      <AdditionalHandling>0</AdditionalHandling>
+    </Package>
+  </Shipment>
+</ShipmentConfirmRequest> 
+

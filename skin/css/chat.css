@@ -46,7 +46,8 @@
 
 .chat{
 	background:url('../img/chat_line_bg.jpg') repeat-x #d5d5d5;
-	min-height:35px;
+	min-height:40px;
+        max-height: 100px;
 	padding:6px;
 	border:1px solid #FFFFFF;
 	max-width: 380px;
@@ -71,7 +72,8 @@
 	font-size:15px;
 	overflow:hidden;
 	vertical-align:top;
-	width:190px;
+	width:270px;
+        word-wrap: break-word;
 }
 
 .chat .gravatar{
@@ -96,6 +98,13 @@
 .chat .author{
 	margin-right:6px;
 	font-size:11px;
+}
+
+.chat-file{
+    margin-top:10px;
+    width:170px;
+    overflow:hidden;
+    display:block;
 }
 
 
