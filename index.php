@@ -7,6 +7,7 @@ if($host == 'localhost'){
 	$host = $host . "/" . $uri[1];
 }
 define('URL', $host);
+define('BASE_DIR', __DIR__);
 
 try {
     require __DIR__ . '/app/bootstrap.php';

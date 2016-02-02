@@ -1,45 +1,45 @@
 /*$(':file').change(function () {
-
-    var file = this.files[0];
-    var name = file.name;
-    var size = file.size;
-    var type = file.type;
-    var flag = true;
-
-    if (type != 'text') {
-        chat.displayError('The extension of your file is not accepted');
-        flag = false;
-    }
-    if (size > 100000) {
-        chat.displayError('The size of your file is more than 100 kb');
-        flag = false;
-    }
-
-    if (flag) {
-        var formData = new FormData(file);
-        $.ajax({
-            url: getBaseUrl() + '/index/savefile', 
-            type: 'POST',
-            xhr: function () {  // Custom XMLHttpRequest
-                var myXhr = $.ajaxSettings.xhr();
-                if (myXhr.upload) { // Check if upload property exists
-                    //myXhr.upload.addEventListener('progress', progressHandlingFunction, false); // For handling the progress of the upload
-                }
-                return myXhr;
-            },
-            //Ajax events
-            
-            error: chat.displayError('is error occured'),
-            // Form data
-            data: formData,
-            //Options to tell jQuery not to process data or worry about content-type.
-            cache: false,
-            contentType: false,
-            processData: false
-        });
-    }
-
-});*/
+ 
+ var file = this.files[0];
+ var name = file.name;
+ var size = file.size;
+ var type = file.type;
+ var flag = true;
+ 
+ if (type != 'text') {
+ chat.displayError('The extension of your file is not accepted');
+ flag = false;
+ }
+ if (size > 100000) {
+ chat.displayError('The size of your file is more than 100 kb');
+ flag = false;
+ }
+ 
+ if (flag) {
+ var formData = new FormData(file);
+ $.ajax({
+ url: getBaseUrl() + '/index/savefile', 
+ type: 'POST',
+ xhr: function () {  // Custom XMLHttpRequest
+ var myXhr = $.ajaxSettings.xhr();
+ if (myXhr.upload) { // Check if upload property exists
+ //myXhr.upload.addEventListener('progress', progressHandlingFunction, false); // For handling the progress of the upload
+ }
+ return myXhr;
+ },
+ //Ajax events
+ 
+ error: chat.displayError('is error occured'),
+ // Form data
+ data: formData,
+ //Options to tell jQuery not to process data or worry about content-type.
+ cache: false,
+ contentType: false,
+ processData: false
+ });
+ }
+ 
+ });*/
 
 
 $(document).ready(function () {
@@ -93,7 +93,23 @@ var chat = {
 
 
         $('#submitForm').submit(function () {
+            var file = $(":file")[0].files[0];
+            var filename = '';
+            if (typeof file !== "undefined") {
+                filename = file.name;
+                var filesize = file.size;
+                var filetype = file.type;
+                var fileflag = true;
 
+                if (filetype != 'txt') {
+                    //chat.displayError('The extension of your file is not accepted');
+                    //return false;
+                }
+                if (filesize > 100000) {
+                    //chat.displayError('The size of your file is more than 100 kb');
+                    //return false;
+                }
+            }
             var text = $('#chatText').val();
 
             if (text.length == 0) {
@@ -110,13 +126,24 @@ var chat = {
                         id: tempID,
                         author: chat.data.name,
                         gravatar: chat.data.gravatar,
-                        text: text.replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                        text: text.replace(/</g, '&lt;').replace(/>/g, '&gt;'),
+                        file: filename
                     };
 
 
             chat.addChatLine($.extend({}, params));
 
-
+            if (typeof file !== "undefined") {
+                var formdata = new FormData();
+                formdata.append("file", file);
+                var ajax = new XMLHttpRequest();
+                ajax.upload.addEventListener("progress", function(){}, false);
+                ajax.addEventListener("load", function(){}, false);
+                ajax.open("POST", "http://mycms/index/savefile");
+          
+                ajax.send(formdata);
+                
+            }
 
             $.tzPOST('submitchat', $(this).serialize(), function (r) {
                 working = false;
@@ -258,11 +285,11 @@ var chat = {
     },
     getChats: function (callback) {
         $.tzGET('getchats', function (r) {
-
-            for (var i = 0; i < r.chats.length; i++) {
-                chat.addChatLine(r.chats[i]);
+            if (r.chats) {
+                for (var i = 0; i < r.chats.length; i++) {
+                    chat.addChatLine(r.chats[i]);
+                }
             }
-
             if (r.chats.length) {
                 chat.data.noActivity = 0;
                 chat.data.lastID = r.chats[i - 1].id;
@@ -275,15 +302,15 @@ var chat = {
                 chat.data.jspAPI.getContentPane().html('<p class="noChats">No chats yet</p>');
             }
 
-            var nextRequest = 1000;
+            var nextRequest = 4000;
 
             // 2 seconds
             if (chat.data.noActivity > 3) {
-                nextRequest = 2000;
+                nextRequest = 6000;
             }
 
             if (chat.data.noActivity > 10) {
-                nextRequest = 5000;
+                nextRequest = 8000;
             }
 
             // 15 seconds

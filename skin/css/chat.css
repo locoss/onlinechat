@@ -4,6 +4,7 @@
 	width:610px;
 	margin:20px auto;
 	position:relative;
+        margin-top:150px;
 }
 
 
@@ -102,22 +103,25 @@
 
 
 #chatUsers{
-	background-color:#202020;
+	//background-color:#202020;
+        background-color:#286090;
 	border:1px solid #111111;
-	height:360px;
+	height:400px;
 	position:absolute;
 	right:0;
 	top:56px;
 	width:150px;
+        //opacity: 0.2;
 }
 
 #chatUsers .user{
-	background:url('http://www.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?size=30') no-repeat 1px 1px #444444;
-	border:1px solid #111111;
+	//background:url('http://www.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?size=30') no-repeat 1px 1px #444444;
+	//border:1px solid #111111;
 	float:left;
 	height:32px;
 	margin:10px 0 0 10px;
 	width:32px;
+        opacity:1;
 }
 
 #chatUsers .user img{
@@ -273,6 +277,8 @@ p.noChats,
 	
 	text-shadow:1px 1px 0 #940f0f;
 }
+
+
 
 
 

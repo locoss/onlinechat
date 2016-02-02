@@ -41,7 +41,7 @@ class Chat extends AModel {
             return json_encode($response);
         }
         
-        return null;
+        return json_encode(array('chats' => $chats));
     }
 
 }

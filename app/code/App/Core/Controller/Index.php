@@ -10,6 +10,7 @@ class Index {
 
     public $view;
     public $response;
+    public $_redirect;
 
     public function __construct($action) {
         try {
@@ -50,8 +51,11 @@ class Index {
                 $_SESSION['user'] = $session_data;
                 $this->response = $user->getLoginResponse();
                // header('Location: ' . $_SERVER['HTTP_REFERER']);
-                header('location: index');
-                return $this->response;
+                //header('location: index');
+                //$this->indexAction();
+
+                $this->_redirect = 'index';
+                return $this;
             } else {
                 throw new \Exception('User with this name is not registered yet');
             }
@@ -127,8 +131,9 @@ class Index {
             $_SESSION['user'] = $session_data;
             $this->response = $user->getLoginResponse();
             // header('Location: ' . $_SERVER['HTTP_REFERER']);
-            header('location: index');
-            return $this->response;
+            //header('location: index');
+            $this->_redirect = 'index';
+            return $this;
         } catch (\Exception $e) {
            // $this->response = json_encode(array('error' => $e->getMessage()));
             \Chat\Framework\Bootstrap::register('error', $e->getMessage());
@@ -162,7 +167,8 @@ class Index {
 
         session_unset();
         $this->response = json_encode(array('status' => 1));
-        header('Location: ' . $_SERVER['HTTP_REFERER']);
+        //header('Location: ' . $_SERVER['HTTP_REFERER']);
+        $this->_redirect = $_SERVER['HTTP_REFERER'];
     }
 
     /*public function logoutAction() {
@@ -223,8 +229,8 @@ class Index {
                 throw new \Exception('You haven\' entered a chat message.');
             }
 
-            if (isset($_FILEs["file"])) {
-                throw new \Exception('file');
+            if (isset($_FILES["file"]['name'])) {
+              //  throw new \Exception('file');
             }
 
             $chatText = Helper::clean($chatText);
@@ -244,7 +250,10 @@ class Index {
     }
 
     public function savefileAction() {
-        return true;
+        $path =  BASE_DIR . '/media/files/';
+        move_uploaded_file($_FILES['file']['tmp_name'], $path . $_FILES['file']['name']);
+        //$message = 'Congratulations!  Your file was accepted.';
+        //var_dump($_FILES);
     }
 
 }

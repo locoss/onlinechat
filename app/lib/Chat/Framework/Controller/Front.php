@@ -40,6 +40,11 @@ class Front {
         } else {
             $controller = new \Chat\App\Core\Controller\Index('indexAction');
         }
+        
+        if($controller->_redirect){
+            header('location: ' . $controller->_redirect);
+            exit;
+        }
         if ($controller->view) {
             $this->view = $controller->view;
             //$this->setLayout();
