@@ -4,11 +4,10 @@
 }
 
 body{
-	color:#eee;
-	//background:url('../img/page_bg.jpg') repeat-x #323232;
+	//color:#eee;
         background:url('../assets/img/backgrounds/1.jpg') repeat-x #323232;
 	font:16px Calibri,Arial,sans-serif;
-	border-top:5px solid #212121;
+	//border-top:5px solid #212121;
 }
 
 a.tzine,a.tzine:visited{

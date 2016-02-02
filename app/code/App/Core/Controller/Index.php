@@ -70,7 +70,7 @@ class Index {
 
         $view = new View();
         $view->setLayout();
-        if ($_SESSION['user']['name']) {
+        if (isset($_SESSION['user']['name'])) {
             $view->getLayout()->setContent('content')->setHead('head');
         } else {
             $view->getLayout()->setContent('login_content')->setHead('login_head');
@@ -247,9 +247,8 @@ class Index {
     public function savefileAction() {
         $path = BASE_DIR . '/media/files/';
 
-        if ($_FILES['photo']['name']) {
-            //if no errors...
-            if (!$_FILES['photo']['error']) {
+        if (isset($_FILES['file']['name'])) {
+            if (!$_FILES['file']['error']) {
                 move_uploaded_file($_FILES['file']['tmp_name'], $path . $_FILES['file']['name']);
             }
         }

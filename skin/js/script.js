@@ -1,45 +1,4 @@
-/*$(':file').change(function () {
- 
- var file = this.files[0];
- var name = file.name;
- var size = file.size;
- var type = file.type;
- var flag = true;
- 
- if (type != 'text') {
- chat.displayError('The extension of your file is not accepted');
- flag = false;
- }
- if (size > 100000) {
- chat.displayError('The size of your file is more than 100 kb');
- flag = false;
- }
- 
- if (flag) {
- var formData = new FormData(file);
- $.ajax({
- url: getBaseUrl() + '/index/savefile', 
- type: 'POST',
- xhr: function () {  // Custom XMLHttpRequest
- var myXhr = $.ajaxSettings.xhr();
- if (myXhr.upload) { // Check if upload property exists
- //myXhr.upload.addEventListener('progress', progressHandlingFunction, false); // For handling the progress of the upload
- }
- return myXhr;
- },
- //Ajax events
- 
- error: chat.displayError('is error occured'),
- // Form data
- data: formData,
- //Options to tell jQuery not to process data or worry about content-type.
- cache: false,
- contentType: false,
- processData: false
- });
- }
- 
- });*/
+
 
 
 $(document).ready(function () {
@@ -101,7 +60,7 @@ var chat = {
                 var filetype = file.type;
                 var fileflag = true;
 
-                if (filetype != 'txt') {
+                if (filetype != 'text/plain') {
                     chat.displayError('The extension of your file is not accepted');
                     return false;
                 }
@@ -142,6 +101,7 @@ var chat = {
                 ajax.open("POST", getBaseUrl()+"/index/savefile");
                 ajax.send(formdata);
                 sending_data = sending_data + '&file=' + filename;
+                $("#file").val('');
             }
             $.tzPOST('submitchat', sending_data, function (r) {
                 working = false;
@@ -306,15 +266,15 @@ var chat = {
                 chat.data.jspAPI.getContentPane().html('<p class="noChats">No chats yet</p>');
             }
 
-            var nextRequest = 4000;
+            var nextRequest = 2000;
 
             // 2 seconds
             if (chat.data.noActivity > 3) {
-                nextRequest = 6000;
+                nextRequest = 4000;
             }
 
             if (chat.data.noActivity > 10) {
-                nextRequest = 8000;
+                nextRequest = 6000;
             }
 
             // 15 seconds
@@ -322,7 +282,7 @@ var chat = {
                 nextRequest = 15000;
             }
 
-            //setTimeout(callback, nextRequest);
+            setTimeout(callback, nextRequest);
         });
     },
     getUsers: function (callback) {
