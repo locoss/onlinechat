@@ -16,8 +16,9 @@ class Resource {
         return DbTable::load($id);
     }
     
-    public static function loadByFieldName($field_name, $field_value){
-        return true;
+    
+    public static function loadByFieldName($init, $field_name, $field_value){
+        return DbTable::loadByFieldName($init, $field_name, $field_value);
     }
 
     public static function save($init, $data, $query) {

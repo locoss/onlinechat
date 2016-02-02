@@ -1,3 +1,47 @@
+/*$(':file').change(function () {
+
+    var file = this.files[0];
+    var name = file.name;
+    var size = file.size;
+    var type = file.type;
+    var flag = true;
+
+    if (type != 'text') {
+        chat.displayError('The extension of your file is not accepted');
+        flag = false;
+    }
+    if (size > 100000) {
+        chat.displayError('The size of your file is more than 100 kb');
+        flag = false;
+    }
+
+    if (flag) {
+        var formData = new FormData(file);
+        $.ajax({
+            url: getBaseUrl() + '/index/savefile', 
+            type: 'POST',
+            xhr: function () {  // Custom XMLHttpRequest
+                var myXhr = $.ajaxSettings.xhr();
+                if (myXhr.upload) { // Check if upload property exists
+                    //myXhr.upload.addEventListener('progress', progressHandlingFunction, false); // For handling the progress of the upload
+                }
+                return myXhr;
+            },
+            //Ajax events
+            
+            error: chat.displayError('is error occured'),
+            // Form data
+            data: formData,
+            //Options to tell jQuery not to process data or worry about content-type.
+            cache: false,
+            contentType: false,
+            processData: false
+        });
+    }
+
+});*/
+
+
 $(document).ready(function () {
 
     // Run the init method on document ready:
@@ -13,13 +57,14 @@ var chat = {
     init: function () {
         $('#name').defaultText('Nickname');
         $('#email').defaultText('Email');
+        $('#homepage').defaultText('Homepage');
 
 
         chat.data.jspAPI = $('#chatLineHolder').jScrollPane({
             verticalDragMinHeight: 12,
             verticalDragMaxHeight: 12
         }).data('jsp');
-       
+
         var working = false;
 
 
@@ -72,8 +117,12 @@ var chat = {
             chat.addChatLine($.extend({}, params));
 
 
+
             $.tzPOST('submitchat', $(this).serialize(), function (r) {
                 working = false;
+                if (r.error) {
+                    chat.displayError(r.error);
+                }
 
                 $('#chatText').val('');
                 $('div.chat-' + tempID).remove();
@@ -190,7 +239,7 @@ var chat = {
         if (!chat.data.lastID) {
             $('#chatLineHolder p').remove();
         }
-        
+
         if (params.id.toString().charAt(0) != 't') {
             var previous = $('#chatLineHolder .chat-' + (+params.id - 1));
             if (previous.length) {
@@ -209,7 +258,7 @@ var chat = {
     },
     getChats: function (callback) {
         $.tzGET('getchats', function (r) {
-            
+
             for (var i = 0; i < r.chats.length; i++) {
                 chat.addChatLine(r.chats[i]);
             }
@@ -320,3 +369,4 @@ $.fn.defaultText = function (value) {
 
     return element.blur();
 }
+

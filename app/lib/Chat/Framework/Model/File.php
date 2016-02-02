@@ -35,6 +35,11 @@ class File extends  AbstractData {
         
     }
     
+    public static function loadByFieldName($init, $field_name, $field_value){
+        DB::init($init);
+        return DB::loadByFieldName($field_name, $field_value);
+    }
+    
     public static function save($init, $data, $query){
         self::$query = $query;
         self::$init = $init;

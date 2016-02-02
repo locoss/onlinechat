@@ -23,47 +23,91 @@ class Index {
             $this->indexAction();
         }
     }
-    public function testAction(){
-      
-        $chat_model = new \Chat\App\Core\Model\Chat();
-        $chat_model->getCollection(array(
-            'order' => 'id',
-            'sort' => 'ASC',
-        ));
 
-        $this->response = $chat_model->getChatsResponse();
-        
+    public function loginAction() {
+
+        if (isset($_POST['name']) && isset($_POST['password'])) {
+            if (trim($_POST['name']) != '' && trim($_POST['password'])) {
+                $name = trim($_POST['name']);
+                $email = trim($_POST['password']);
+            }
+        }
+
+        $gravatar = md5(strtolower(trim($email)));
+
+        $user = new \Chat\App\Core\Model\User();
+        $user->loadByFieldName('gravatar', $gravatar);
+        try {
+            if ($user->getObject()->loaded) {
+                $session_data = array(
+                    'name' => $user->getName(),
+                    'gravatar' => Helper::gravatarFromHash($user->getGravatar())
+                );
+
+                if ($user->getHomepage()) {
+                    array_push($session_data, array('homepage' => $user->getHomepage()));
+                }
+                $_SESSION['user'] = $session_data;
+                $this->response = $user->getLoginResponse();
+               // header('Location: ' . $_SERVER['HTTP_REFERER']);
+                header('location: index');
+                return $this->response;
+            } else {
+                throw new \Exception('User with this name is not registered yet');
+            }
+        } catch (\Exception $e) {
+           // $this->response = json_encode(array('error' => $e->getMessage()));
+            \Chat\Framework\Bootstrap::register('error', $e->getMessage());
+            $this->indexAction();
+        }
     }
 
     public function indexAction() {
-        $this->view = new View();
+
+        $view = new View();
+        $view->setLayout();
+        if ($_SESSION['user']['name']) {
+            $view->getLayout()->setContent('content')->setHead('head');
+        }else{
+            $view->getLayout()->setContent('login_content')->setHead('login_head');
+        }
+        
+        
+        
+        $this->view = $view;
     }
 
-    public function loginAction() {
-        if (isset($_POST['name']) && isset($_POST['email'])) {
-            if (trim($_POST['name']) != '' && trim($_POST['email'])) {
+    public function registerAction() {
+        if (isset($_POST['name']) && isset($_POST['email']) && isset($_POST['password'])) {
+            if (trim($_POST['name']) != '' && trim($_POST['email']) != '' && trim($_POST['password']) != '') {
                 $name = trim($_POST['name']);
                 $email = trim($_POST['email']);
+                $password = trim($_POST['password']);
             }
         }
 
         try {
-            if (!isset($name) || !isset($email)) {
+            if (!isset($name) && !isset($email) && !isset($password)) {
                 throw new \Exception('Fill in all the required fields.');
             }
 
             if (!filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL)) {
-               // throw new \Exception('Your email is invalid.');
+                throw new \Exception('Your email is invalid.');
             }
 
-            $gravatar = md5(strtolower(trim($email)));
+            $gravatar = md5(strtolower(trim($password)));
             $user = new \Chat\App\Core\Model\User();
             $user->setName($name);
+            $user->setEmail($email);
             $user->setGravatar($gravatar);
-$homepage = 'vk.com';
-            if (isset($homepage)) { // $_POST['homepage]
-                $homepage = Helper::getRightUrl(trim($homepage)); // $_POST['homepage]
-                $user->setHomepage($homepage);
+            //$homepage = 'lol';
+            if (isset($_POST['homepage'])) { // $_POST['homepage]
+                $url = $_POST['homepage'];
+                $url = Helper::getRightUrl(trim($url)); // $_POST['homepage]
+
+                if (!filter_var($url, FILTER_VALIDATE_URL) === false) {
+                    $user->setHomepage($url);
+                }
             }
 
             $user->save();
@@ -71,21 +115,24 @@ $homepage = 'vk.com';
             if ($user->getObject()->affected_rows != 1) {
                 throw new \Exception('This nick is in use.');
             }
-            
+
             $session_data = array(
                 'name' => $user->getName(),
                 'gravatar' => Helper::gravatarFromHash($user->getGravatar())
             );
-            
-            if($user->getHomepage()){
+
+            if ($user->getHomepage()) {
                 array_push($session_data, array('homepage' => $user->getHomepage()));
             }
             $_SESSION['user'] = $session_data;
             $this->response = $user->getLoginResponse();
-
+            // header('Location: ' . $_SERVER['HTTP_REFERER']);
+            header('location: index');
             return $this->response;
         } catch (\Exception $e) {
-            $this->response = json_encode(array('error' => $e->getMessage()));
+           // $this->response = json_encode(array('error' => $e->getMessage()));
+            \Chat\Framework\Bootstrap::register('error', $e->getMessage());
+            $this->indexAction();
         }
     }
 
@@ -102,8 +149,23 @@ $homepage = 'vk.com';
         $this->response = json_encode($response);
         return $this->response;
     }
-
+    
+    
     public function logoutAction() {
+
+        $session_user_name = $_SESSION['user']['name'];
+
+        $user = new \Chat\App\Core\Model\User();
+        //$user->setName($session_user_name);
+        //$user->load('name', $session_user_name);
+        //$user->delete('name');
+
+        session_unset();
+        $this->response = json_encode(array('status' => 1));
+        header('Location: ' . $_SERVER['HTTP_REFERER']);
+    }
+
+    /*public function logoutAction() {
 
         $session_user_name = $_SESSION['user']['name'];
 
@@ -115,7 +177,7 @@ $homepage = 'vk.com';
         session_unset();
         $this->response = json_encode(array('status' => 1));
         header('Location: ' . $_SERVER['HTTP_REFERER']);
-    }
+    }*/
 
     public function getusersAction() {
         $user = new \Chat\App\Core\Model\User();
@@ -133,7 +195,7 @@ $homepage = 'vk.com';
                     'sort' => 'ASC',
                     'limit' => 10
         ));
-        
+
         $this->response = $user->getResponse();
 
         return $this->response;
@@ -161,6 +223,10 @@ $homepage = 'vk.com';
                 throw new \Exception('You haven\' entered a chat message.');
             }
 
+            if (isset($_FILEs["file"])) {
+                throw new \Exception('file');
+            }
+
             $chatText = Helper::clean($chatText);
             $chat = new \Chat\App\Core\Model\Chat();
 
@@ -173,8 +239,12 @@ $homepage = 'vk.com';
             $this->response = $chat->getChatSubmitResponse();
             return $this->response;
         } catch (\Exception $e) {
-            $e->getMessage();
+            $this->response = json_encode(array('error' => $e->getMessage()));
         }
+    }
+
+    public function savefileAction() {
+        return true;
     }
 
 }

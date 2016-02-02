@@ -11,32 +11,32 @@ class View {
         //$this->generate();
     }
 
-    public function generate() {
-    $layout =  $this->layout;
-    $view_object = new $layout();
-		
+    public function generate($layout) {
+        $layout = $this->layout;
+        //$view_object = new $layout();
+        $layout->generate();
     }
-    
-    
-    public function setLayout($view_info){
-        if($view_info){
-            
-            $this->layout = $view_info['layout'];
-            $this->setTemplate($view_info['template']);
+
+    public function setLayout() {
+        $config = \Chat\Framework\Bootstrap::getConfig();
+        $view_info = $config['view'];
+        if ($view_info) {
+            $this->layout = new $view_info['layout']();
+            //$this->setTemplate($view_info['template']);
         }
+        return $this;
         //return $this->generate();
     }
-    
-    protected function setTemplate($template_path_file){
+
+    protected function setTemplate($template_path_file) {
         $this->template = $template_path_file;
-        
     }
-    
-    public function getLayout(){
+
+    public function getLayout() {
         return $this->layout;
     }
-    
-    public function getTemplate(){
+
+    public function getTemplate() {
         return $this->template;
     }
 

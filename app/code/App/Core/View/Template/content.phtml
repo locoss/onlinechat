@@ -1,0 +1,36 @@
+<?php
+$url = Chat\Framework\Bootstrap::BaseUrl();
+?>
+
+
+        <div class="container-fluid">
+            <div id="chatContainer">
+                <div id="chatTopBar" class="rounded"></div>
+                <div id="chatLineHolder"></div>
+                <div id="chatUsers" class="rounded"> 
+                </div>
+                <div id="chatBottomBar" class="rounded">
+                    <div class="tip"></div>
+
+                    <form id="loginForm" method="post" action="" class="form-inline">
+                        <input id="name" name="name" class="rounded" maxlength="16" />
+                        <input id="email" name="email" class="rounded" />
+                        <input type="submit" class="blueButton" value="Login" />
+                    </form>
+
+                    <form id="submitForm" method="post" action="">
+                        <input id="chatText" name="chatText" class="rounded" maxlength="255" />
+                        <input type="submit" class="blueButton" value="Submit" />
+                        <input id="file" name="file"  type="file" maxlength="255" />
+                    </form>
+                </div>
+            </div>
+      </div>
+
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+        <script src="<?php echo $url ?>/skin/js/jScrollPane/jquery.mousewheel.js"></script>
+        <script src="<?php echo $url ?>/skin/js/jScrollPane/jScrollPane.min.js"></script>
+        <script src="<?php echo $url ?>/skin/js/script.js"></script>
+         
+    

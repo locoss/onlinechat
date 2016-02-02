@@ -42,7 +42,7 @@ class Front {
         }
         if ($controller->view) {
             $this->view = $controller->view;
-            $this->setLayout();
+            //$this->setLayout();
             $this->generateLayout();
         }
         if ($controller->response) {
@@ -52,12 +52,13 @@ class Front {
 
     public function setLayout() {
         $view = $this->getView();
-        $view->setLayout($this->config['view']);
+        //$view->setLayout($this->config['view']);
     }
 
     public function generateLayout() {
         $view = $this->getView();
-        $view->generate();
+        $layout = $view->getLayout();
+        $view->generate($layout);
     }
 
     protected function getView() {

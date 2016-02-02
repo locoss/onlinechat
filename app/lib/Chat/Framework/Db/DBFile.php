@@ -69,10 +69,10 @@ class DBFile {
                 }
             }
         }
-        
-        if(self::$instance->_init == 'chat'){
-            $data['ts'] = date("Y-m-d H:i:s",strtotime('+1 hour'));  // if wrong time settings on server
-          //  $data['ts'] = date("Y-m-d H:i:s");
+
+        if (self::$instance->_init == 'chat') {
+            //  $data['ts'] = date("Y-m-d H:i:s",strtotime('+1 hour'));  // if wrong time settings on server
+            $data['ts'] = date("Y-m-d H:i:s");
         }
 
         if (is_array($table_database)) {
@@ -87,7 +87,7 @@ class DBFile {
         foreach ($data as $prop => $pro_value) {
             $object->$prop = $pro_value;
         }
-        
+
         //$object->insert_id = count($table_database) + 1;
         $object->insert_id = $object->id;
         $object->affected_rows = 1;
@@ -135,7 +135,8 @@ class DBFile {
                     }
                 }
             }
-            $file = fopen(self::$instance->fpath, 'wb');
+            $file = fopen(self::$instance->fpath, 'w');
+            //$file = fopen(self::$instance->fpath, 'wb'); // if windows
             fwrite($file, json_encode($table_database));
             fclose($file);
 
@@ -143,6 +144,24 @@ class DBFile {
         }
 
         return self::$instance->database;
+    }
+
+    public static function loadByFieldName($field_name, $field_value) {
+        $table_database = self::$instance->database;
+        if (is_array($table_database)) {
+            foreach ($table_database as $key => $value) {
+                if ($value[$field_name] == $field_value) {
+                    $returned_array = $value;
+                    $object = new \stdClass();
+                    foreach ($value as $property => $prop_value) {
+                        $object->$property = $prop_value;
+                    }
+                    $object->loaded = true;
+                    self::$instance->object = $object;
+                    return $value;
+                }
+            }
+        }
     }
 
 }

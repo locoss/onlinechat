@@ -28,10 +28,10 @@ class Chat extends AModel {
         if (is_array($this->getResource())) {
             foreach ($this->getResource() as $chat) {
                 $chat->time = array(
-                  //  'hours' => gmdate('H', strtotime($chat->ts)), 
-                  //  'minutes' => gmdate('i', strtotime($chat->ts))
-                    'hours' => gmdate('H', strtotime($chat->ts) + 60 * 60),  // if wrong time settings on server
-                    'minutes' => gmdate('i', strtotime($chat->ts) + 60 * 60)  // if wrong time settings on server
+                    'hours' => gmdate('H', strtotime($chat->ts)), 
+                    'minutes' => gmdate('i', strtotime($chat->ts))
+                  //  'hours' => gmdate('H', strtotime($chat->ts) + 60 * 60),  // if wrong time settings on server
+                  //  'minutes' => gmdate('i', strtotime($chat->ts) + 60 * 60)  // if wrong time settings on server
                 );
                 $chat->gravatar = Helper::gravatarFromHash($chat->gravatar);
                 $chats[] = $chat;
