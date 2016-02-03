@@ -40,24 +40,27 @@ class Index {
         $user->loadByFieldName('gravatar', $gravatar);
         try {
             if ($user->getObject()) {
-				if ($user->getObject()->loaded) {
-					$session_data = array(
-						'name' => $user->getName(),
-						'gravatar' => Helper::gravatarFromHash($user->getGravatar())
-					);
+                if ($user->getObject()->loaded) {
+                    if ($user->getName() != $name) {
+                        throw new \Exception('Your name is not valid');
+                    }
+                    $session_data = array(
+                        'name' => $user->getName(),
+                        'gravatar' => Helper::gravatarFromHash($user->getGravatar())
+                    );
 
-					if ($user->getHomepage()) {
-						array_push($session_data, array('homepage' => $user->getHomepage()));
-					}
-					$_SESSION['user'] = $session_data;
-					$this->response = $user->getLoginResponse();
-					// header('Location: ' . $_SERVER['HTTP_REFERER']);
-					//header('location: index');
-					//$this->indexAction();
+                    if ($user->getHomepage()) {
+                        array_push($session_data, array('homepage' => $user->getHomepage()));
+                    }
+                    $_SESSION['user'] = $session_data;
+                    $this->response = $user->getLoginResponse();
+                    // header('Location: ' . $_SERVER['HTTP_REFERER']);
+                    //header('location: index');
+                    //$this->indexAction();
 
-					$this->_redirect = 'index';
-					return $this;
-				}
+                    $this->_redirect = 'index';
+                    return $this;
+                }
             } else {
                 throw new \Exception('User with this name is not registered yet');
             }
