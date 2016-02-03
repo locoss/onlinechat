@@ -119,7 +119,7 @@ class Index {
             $user->save();
 
             if ($user->getObject()->affected_rows != 1) {
-                throw new \Exception('This nick is in use.');
+                throw new \Exception('This email is in use.');
             }
 
             $session_data = array(

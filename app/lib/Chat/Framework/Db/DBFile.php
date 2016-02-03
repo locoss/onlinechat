@@ -59,8 +59,8 @@ class DBFile {
         $object->insert_id = 1;
         if (is_array($table_database)) {
             foreach ($table_database as $row) {
-                if (isset($row['name'])) {
-                    if ($row['name'] == $data['name']) {
+                if (isset($row['email'])) {
+                    if ($row['email'] == $data['email']) {
                         $object->affected_rows = 0;
                         //\Chat\Framework\Bootstrap::register('object', $affected_rows);
                         self::$instance->object = $object;
